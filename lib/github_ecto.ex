@@ -24,20 +24,15 @@ defmodule GitHub.Ecto do
   def execute(_repo, _meta, prepared, [] = _params, _preprocess, [] = _opts) do
     {_, query} = prepared
     url = to_url(query)
-    {0, make_request(url)}
+    items = make_request(url) |> Enum.map(fn item -> [item] end)
+
+    {0, items}
   end
 
   defp make_request(url) do
     HTTPoison.get!(url).body
-      |> Poison.decode!
-      |> Map.fetch!("items")
-      |> Enum.map(fn item ->
-        [%{
-            title: item["title"],
-            state: item["state"],
-            url: item["url"],
-          }]
-      end)
+    |> Poison.decode!
+    |> Map.fetch!("items")
   end
 
   def to_url(query) do

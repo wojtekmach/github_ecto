@@ -10,6 +10,9 @@ defmodule GitHub.EctoTest do
   end
 
   test "to_url" do
+    q = from r in "repositories", where: r.user == "elixir-lang"
+    assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/repositories?q=user:elixir-lang"
+
     q = from i in "issues", where: i.repo == "elixir-lang/ecto"
     assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/issues?q=repo:elixir-lang/ecto"
 
@@ -30,7 +33,7 @@ defmodule GitHub.EctoTest do
 
       issues = TestRepo.all(q)
       assert length(issues) == 30
-      assert hd(issues) == %{title: "Minor cleanup on smart escape", state: "closed", url: "https://api.github.com/repos/elixir-lang/ecto/issues/1"}
+      assert %{"title" => "Minor cleanup on smart escape", "state" => "closed", "url" => "https://api.github.com/repos/elixir-lang/ecto/issues/1"} = hd(issues)
     end
   end
 end
