@@ -3,16 +3,27 @@
 ## Example
 
 ```elixir
-# Define `Repo` (or `GitHub` or whatever) somewhere in your application code.
+# 0. Install this application (see instructions at the end of the README). Paste the rest of this snippet into an iex session.
+
+# 1. Define `Repo` (or `GitHub` or whatever):
 defmodule Repo do
   use Ecto.Repo,
     otp_app: :my_app,
     adapter: GitHub.Ecto
 end
 
+# 2. Configure this application. Currently the application has no configuration, however this step is still required. In a real project you'd configure it in config/*.exs as every other adapter.
+Application.put_env(:my_app, Repo, [])
+
+# 3. Start the Repo process. In a real project you'd put the Repo module in your project's supervision tree:
+{:ok, _pid} = Repo.start_link
+
+# Import Ecto.Query
+import Ecto.Query, only: [from: 2]
+
 # Here, we list all open issues:
 Repo.all(from i in "issues", where: i.repo == "elixir-lang/ecto" and i.state == "open")
-# => [%{title: "...", state: "...", url: "..."}, ...]
+# => [%{title: "...", state: "...", url: "...", ...}, ...]
 ```
 
 See more examples of usage in [tests](test/github_ecto_test.exs). Also see the [Ecto API](http://hexdocs.pm/ecto/Ecto.html) and [GitHub API](https://developer.github.com/v3).
