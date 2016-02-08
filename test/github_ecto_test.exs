@@ -9,16 +9,20 @@ defmodule GitHub.EctoTest do
     :ok
   end
 
-  test "to_url" do
+  test "to_url: search different entities" do
     q = from r in "repositories", where: r.user == "elixir-lang"
     assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/repositories?q=user:elixir-lang"
 
     q = from i in "issues", where: i.repo == "elixir-lang/ecto"
     assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/issues?q=repo:elixir-lang/ecto"
+  end
 
+  test "to_url: multiple fields" do
     q = from i in "issues", where: i.repo == "elixir-lang/ecto" and i.state == "closed"
     assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/issues?q=repo:elixir-lang/ecto+state:closed"
+  end
 
+  test "to_url: order_by" do
     q = from i in "issues", where: i.repo == "elixir-lang/ecto", order_by: i.created
     assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/issues?q=repo:elixir-lang/ecto&sort=created&order=asc"
 
