@@ -1,4 +1,14 @@
 defmodule GitHub.Ecto do
+  defmodule Client do
+    def search(path) do
+      url = "https://api.github.com#{path}"
+
+      HTTPoison.get!(url).body
+      |> Poison.decode!
+      |> Map.fetch!("items")
+    end
+  end
+
   ## Boilerplate
 
   @behaviour Ecto.Adapter
@@ -24,17 +34,9 @@ defmodule GitHub.Ecto do
   def execute(_repo, _meta, prepared, [] = _params, _preprocess, [] = _opts) do
     {_, query} = prepared
     path = to_search_path(query)
-    items = search(path) |> Enum.map(fn item -> [item] end)
+    items = Client.search(path) |> Enum.map(fn item -> [item] end)
 
     {0, items}
-  end
-
-  defp search(path) do
-    url = "https://api.github.com#{path}"
-
-    HTTPoison.get!(url).body
-    |> Poison.decode!
-    |> Map.fetch!("items")
   end
 
   def to_search_path(query) do
