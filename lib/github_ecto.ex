@@ -37,7 +37,11 @@ defmodule GitHub.Ecto do
 
   def to_url(query) do
     {from, _} = query.from
-    str = [where(query), order_by(query)] |> Enum.filter(&(&1 != "")) |> Enum.join("&")
+
+    str =
+      [where(query), order_by(query), limit_offset(query)]
+      |> Enum.filter(&(&1 != ""))
+      |> Enum.join("&")
 
     "https://api.github.com/search/#{from}?#{str}"
   end
@@ -67,6 +71,33 @@ defmodule GitHub.Ecto do
   end
   defp order_by(%Ecto.Query{order_bys: []}), do: ""
   defp order_by(_), do: raise ArgumentError, "GitHub API can only order by one field"
+
+  defp limit_offset(%Ecto.Query{limit: limit, offset: offset}) do
+    limit = if limit do
+      %Ecto.Query.QueryExpr{expr: expr} = limit
+      expr
+    end
+
+    offset = if offset do
+      %Ecto.Query.QueryExpr{expr: expr} = offset
+      expr
+    end
+
+    case {limit, offset} do
+      {nil, nil} ->
+        ""
+
+      {limit, nil} ->
+        "per_page=#{limit}"
+
+      {nil, offset} ->
+        "page=2&per_page=#{offset}"
+
+      {limit, offset} ->
+        page = (offset / limit) + 1 |> round
+        "page=#{page}&per_page=#{limit}"
+    end
+  end
 
   ## Writes
 

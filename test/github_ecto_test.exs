@@ -26,6 +26,21 @@ defmodule GitHub.EctoTest do
     assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/issues?q=repo:elixir-lang/ecto&sort=created&order=desc"
   end
 
+  test "to_url: limit" do
+    q = from i in "issues", where: i.repo == "elixir-lang/ecto", limit: 10
+    assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/issues?q=repo:elixir-lang/ecto&per_page=10"
+  end
+
+  test "to_url: offset" do
+    q = from i in "issues", where: i.repo == "elixir-lang/ecto", offset: 10
+    assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/issues?q=repo:elixir-lang/ecto&page=2&per_page=10"
+  end
+
+  test "to_url: limit and offset" do
+    q = from i in "issues", where: i.repo == "elixir-lang/ecto", limit: 5, offset: 10
+    assert GitHub.Ecto.to_url(q) == "https://api.github.com/search/issues?q=repo:elixir-lang/ecto&page=3&per_page=5"
+  end
+
   test "search issues" do
     use_cassette("search issues") do
       q = from i in "issues", where: i.repo == "elixir-lang/ecto" and i.state == "closed", order_by: [asc: i.created]
