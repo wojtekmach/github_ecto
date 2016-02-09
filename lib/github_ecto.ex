@@ -1,5 +1,6 @@
 defmodule GitHub.Ecto do
   alias GitHub.Ecto.SearchPath
+  alias GitHub.Ecto.Request
   alias GitHub.Client
 
   ## Boilerplate
@@ -36,13 +37,27 @@ defmodule GitHub.Ecto do
   ## Writes
 
   def insert(_repo, %{model: model} = _meta, params, _autogen, _returning, _opts) do
-    url = Client.create(model, params)
+    url = Request.build(model, params) |> Client.create
+
     {:ok, %{url: url}}
   end
 
   def update(_repo, _, _, _, _, _, _), do: raise ArgumentError, "GitHub adapter doesn't yet support update"
 
   def delete(_repo, _, _, _, _), do: raise ArgumentError, "GitHub adapter doesn't yet support delete"
+end
+
+defmodule GitHub.Ecto.Request do
+  def build(GitHub.Issue, params) do
+    repo = Keyword.fetch!(params, :repo)
+    title = Keyword.fetch!(params, :title)
+    body = Keyword.fetch!(params, :body)
+
+    path = "/repos/#{repo}/issues"
+    json = Poison.encode!(%{title: title, body: body})
+
+    {path, json}
+  end
 end
 
 defmodule GitHub.Ecto.SearchPath do

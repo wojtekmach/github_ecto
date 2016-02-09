@@ -13,8 +13,8 @@ defmodule GitHub.Client do
   end
 
   # Returns url of the created entity
-  def create(model, params) do
-    GenServer.call(__MODULE__, {:create, model, params})
+  def create({path, json}) do
+    GenServer.call(__MODULE__, {:create, path, json})
   end
 
   ## Callbacks
@@ -29,20 +29,11 @@ defmodule GitHub.Client do
     {:reply, result, token}
   end
 
-  def handle_call({:create, GitHub.Issue, params}, _from, token) do
-    require Logger
-
-    repo = Keyword.fetch!(params, :repo)
-    title = Keyword.fetch!(params, :title)
-    body = Keyword.fetch!(params, :body)
-
-    json = Poison.encode!(%{title: title, body: body})
-
-    url = "https://api.github.com/repos/#{repo}/issues"
+  def handle_call({:create, path, json}, _from, token) do
+    url = "https://api.github.com#{path}"
     url = if token, do: url <> "?access_token=#{token}", else: url
 
-    result = HTTPoison.post!(url, json).body
-    |> Poison.decode!
+    result = HTTPoison.post!(url, json).body |> Poison.decode!
 
     %{"html_url" => url} = result
 
