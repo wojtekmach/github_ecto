@@ -11,7 +11,10 @@ defmodule GitHub.EctoTest do
 
   test "search issues" do
     use_cassette("search issues") do
-      q = from i in "issues", where: i.repo == "elixir-lang/ecto" and i.state == "closed", order_by: [asc: i.created]
+      q = from i in "issues",
+        where: i.repo == "elixir-lang/ecto" and i.state == "closed",
+        order_by: [asc: i.created]
+
       assert GitHub.Ecto.SearchPath.build(q) == "/search/issues?q=repo:elixir-lang/ecto+state:closed&sort=created&order=asc"
 
       issues = TestRepo.all(q)
