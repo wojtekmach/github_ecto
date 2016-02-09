@@ -24,7 +24,10 @@ Application.put_env(:my_app, Repo, [])
 import Ecto.Query, only: [from: 2]
 
 # 5. List all open feature requests on Ecto:
-Repo.all(from i in "issues", where: i.repo == "elixir-lang/ecto" and i.state == "open" and "Kind:Feature" in i.labels)
+Repo.all(from i in "issues",
+       where: i.repo == "elixir-lang/ecto" and
+              i.state == "open" and
+              "Kind:Feature" in i.labels)
 # => [%{"title" => "...", "state" => "...", "url" => "...", ...}, ...]
 ```
 
