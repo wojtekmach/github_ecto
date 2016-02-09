@@ -5,6 +5,7 @@ defmodule GitHub.EctoTest do
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
   setup_all do
+    ExVCR.Config.filter_sensitive_data("access_token=.*", "access_token=[FILTERED]")
     ExVCR.Config.cassette_library_dir("test/vcr_cassettes")
     :ok
   end
@@ -25,6 +26,14 @@ defmodule GitHub.EctoTest do
         "url" => "https://api.github.com/repos/elixir-lang/ecto/issues/43",
         "labels" => [%{"name" => "Kind:Bug"}, %{"name" => "Note:Discussion"}],
       } = hd(issues)
+    end
+  end
+
+  test "create an issue" do
+    use_cassette("create an issue") do
+      issue = %GitHub.Issue{title: "Test", body: "Integration tests are a scam!", repo: "wojtekmach/github_ecto"}
+
+      assert %GitHub.Issue{title: "Test", body: "Integration" <> _rest, url: "https://github.com/wojtekmach/github_ecto/issues/" <> _number} = TestRepo.insert!(issue)
     end
   end
 end

@@ -11,7 +11,8 @@
 defmodule Repo do
   use Ecto.Repo,
     otp_app: :my_app,
-    adapter: GitHub.Ecto
+    adapter: GitHub.Ecto,
+    token: nil            # set to a string to be able to write or access private repos. Be careful!
 end
 
 # 2. Configure this application. Currently the application has no configuration, however this step is still required. In a real project you'd configure it in config/*.exs as every other adapter.
@@ -29,6 +30,9 @@ Repo.all(from i in "issues",
               i.state == "open" and
               "Kind:Feature" in i.labels)
 # => [%{"title" => "...", "state" => "...", "url" => "...", ...}, ...]
+
+# 6. (optional) Create an issue if something doesn't look right :-)
+Repo.insert(%GitHub.Issue{title: "Something went wrong", body: "Everything's broken", repo: "wojtekmach/github_ecto"})
 ```
 
 See more examples of usage in [tests](test/github_ecto_test.exs). Also see the [Ecto API](http://hexdocs.pm/ecto/Ecto.html) and [GitHub API](https://developer.github.com/v3).
