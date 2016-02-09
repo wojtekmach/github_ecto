@@ -37,6 +37,12 @@ defmodule GitHub.Ecto do
     defp parse_where({:==, [], [{{:., [], [{:&, [], [0]}, field]}, [ecto_type: :any], []}, value]}) do
       "#{field}:#{value}"
     end
+    defp parse_where({:in, [], [%Ecto.Query.Tagged{tag: nil, type: {:in_array, {0, :labels}}, value: value}, _]}) do
+      "label:#{value}"
+    end
+    defp parse_where({:in, [], [value, {{:., [], [{:&, [], [0]}, :labels]}, [ecto_type: :any], []}]}) do
+      "label:#{value}"
+    end
 
     defp order_by(%Ecto.Query{order_bys: [order_by]}) do
       %Ecto.Query.QueryExpr{expr: expr} = order_by

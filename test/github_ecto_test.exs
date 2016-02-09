@@ -12,14 +12,19 @@ defmodule GitHub.EctoTest do
   test "search issues" do
     use_cassette("search issues") do
       q = from i in "issues",
-        where: i.repo == "elixir-lang/ecto" and i.state == "closed",
+        where: i.repo == "elixir-lang/ecto" and i.state == "closed" and "Kind:Bug" in i.labels,
         order_by: [asc: i.created]
 
-      assert GitHub.Ecto.SearchPath.build(q) == "/search/issues?q=repo:elixir-lang/ecto+state:closed&sort=created&order=asc"
+      assert GitHub.Ecto.SearchPath.build(q) == "/search/issues?q=repo:elixir-lang/ecto+state:closed+label:Kind:Bug&sort=created&order=asc"
 
       issues = TestRepo.all(q)
       assert length(issues) == 30
-      assert %{"title" => "Minor cleanup on smart escape", "state" => "closed", "url" => "https://api.github.com/repos/elixir-lang/ecto/issues/1"} = hd(issues)
+      assert %{
+        "title" => "Support div and rem, discuss what should happen with /",
+        "state" => "closed",
+        "url" => "https://api.github.com/repos/elixir-lang/ecto/issues/43",
+        "labels" => [%{"name" => "Kind:Bug"}, %{"name" => "Note:Discussion"}],
+      } = hd(issues)
     end
   end
 end
@@ -40,6 +45,11 @@ defmodule GitHub.Ecto.SearchPathTest do
   test "multiple fields" do
     q = from i in "issues", where: i.repo == "elixir-lang/ecto" and i.state == "closed"
     assert build(q) == "/search/issues?q=repo:elixir-lang/ecto+state:closed"
+  end
+
+  test "in array" do
+    q = from i in "issues", where: i.repo == "elixir-lang/ecto" and "Kind:Bug" in i.labels
+    assert build(q) == "/search/issues?q=repo:elixir-lang/ecto+label:Kind:Bug"
   end
 
   test "order_by" do
