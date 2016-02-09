@@ -47,9 +47,14 @@ defmodule GitHub.Ecto.SearchPathTest do
     assert build(q) == "/search/issues?q=repo:elixir-lang/ecto+state:closed"
   end
 
-  test "in array" do
+  test "label" do
     q = from i in "issues", where: i.repo == "elixir-lang/ecto" and "Kind:Bug" in i.labels
     assert build(q) == "/search/issues?q=repo:elixir-lang/ecto+label:Kind:Bug"
+  end
+
+  test "multiple labels" do
+    q = from i in "issues", where: i.repo == "elixir-lang/ecto" and "Kind:Bug" in i.labels and "Level:Advanced" in i.labels
+    assert build(q) == "/search/issues?q=repo:elixir-lang/ecto+label:Kind:Bug+label:Level:Advanced"
   end
 
   test "order_by" do
