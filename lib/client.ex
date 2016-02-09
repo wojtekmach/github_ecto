@@ -20,7 +20,7 @@ defmodule GitHub.Client do
   ## Callbacks
 
   def handle_call({:search, path}, _from, token) do
-    url = url(path, nil)
+    url = url(path, token)
 
     result = HTTPoison.get!(url).body
     |> Poison.decode!
@@ -38,13 +38,14 @@ defmodule GitHub.Client do
     {:reply, url, token}
   end
 
-  defp url(path, token) do
-    url = "https://api.github.com#{path}"
+  @base_url "https://api.github.com"
 
-    if token do
-      url <> "?access_token=#{token}"
-    else
-      url
-    end
+  defp url(path, nil) do
+    @base_url <> path
+  end
+  defp url(path, token) do
+    c = if String.contains?(path, "?"), do: "&", else: "?"
+
+    @base_url <> path <> c <> "access_token=" <> token
   end
 end
