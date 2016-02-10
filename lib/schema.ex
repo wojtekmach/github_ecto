@@ -4,6 +4,7 @@ defmodule GitHub.Issue do
   schema "issues" do
     field :title, :string
     field :body, :string
+    field :state, :string
     field :url, :string
     field :comments, :integer
     field :created_at, Ecto.DateTime
