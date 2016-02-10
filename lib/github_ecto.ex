@@ -96,15 +96,28 @@ defmodule GitHub.Ecto.SearchPath do
     "label:#{value}"
   end
 
-  defp order_by(%Ecto.Query{order_bys: [order_by]}) do
+  defp order_by(%Ecto.Query{from: {from, _}, order_bys: [order_by]}) do
     %Ecto.Query.QueryExpr{expr: expr} = order_by
     [{order, {{:., [], [{:&, [], [0]}, sort]}, _, []}}] = expr
-    sort = Keyword.fetch!([comments: "comments", created_at: "created", updated_at: "updated"], sort)
+    {:ok, sort} = normalize_sort(from, sort)
 
     "sort=#{sort}&order=#{order}"
   end
   defp order_by(%Ecto.Query{order_bys: []}), do: ""
   defp order_by(_), do: raise ArgumentError, "GitHub API can only order by one field"
+
+  defp normalize_sort("issues", :comments), do: {:ok, "comments"}
+  defp normalize_sort("issues", :created_at), do: {:ok, "created"}
+  defp normalize_sort("issues", :updated_at), do: {:ok, "updated"}
+  defp normalize_sort("repositories", :stars), do: {:ok, "stars"}
+  defp normalize_sort("repositories", :forks), do: {:ok, "forks"}
+  defp normalize_sort("repositories", :updated_at), do: {:ok, "updated"}
+  defp normalize_sort("users", :followers), do: {:ok, "followers"}
+  defp normalize_sort("users", :public_repos), do: {:ok, "repositories"}
+  defp normalize_sort("users", :created_at), do: {:ok, "joined"}
+  defp normalize_sort(from, field) do
+    {:error, "order_by for #{inspect(from)} and #{inspect(field)} is not supported"}
+  end
 
   defp limit_offset(%Ecto.Query{limit: limit, offset: offset}) do
     limit = if limit do
