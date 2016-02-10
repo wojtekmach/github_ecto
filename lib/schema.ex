@@ -4,7 +4,10 @@ defmodule GitHub.Issue do
   schema "issues" do
     field :title, :string
     field :body, :string
-    field :repo, :string
     field :url, :string
+
+    # `repo` field doesn't exist in GitHub API (there's `repository_url` though)
+    # and we use it to figure out to which repo we want to add an issue to
+    field :repo, :string
   end
 end
