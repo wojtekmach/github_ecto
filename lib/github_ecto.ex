@@ -29,7 +29,7 @@ defmodule GitHub.Ecto do
   def execute(_repo, _meta, prepared, [] = _params, _preprocess, [] = _opts) do
     {_, query} = prepared
     path = SearchPath.build(query)
-    items = Client.search(path) |> Enum.map(fn item -> [item] end)
+    items = Client.search(path) |> Map.fetch!("items") |> Enum.map(fn item -> [item] end)
 
     {0, items}
   end
@@ -37,9 +37,10 @@ defmodule GitHub.Ecto do
   ## Writes
 
   def insert(_repo, %{model: model} = _meta, params, _autogen, _returning, _opts) do
-    url = Request.build(model, params) |> Client.create
+    result = Request.build(model, params) |> Client.create
+    %{"id" => id, "html_url" => url} = result
 
-    {:ok, %{url: url}}
+    {:ok, %{id: id, url: url}}
   end
 
   def update(_repo, _, _, _, _, _, _), do: raise ArgumentError, "GitHub adapter doesn't yet support update"

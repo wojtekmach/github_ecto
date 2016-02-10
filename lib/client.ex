@@ -22,20 +22,14 @@ defmodule GitHub.Client do
   def handle_call({:search, path}, _from, token) do
     url = url(path, token)
 
-    result = HTTPoison.get!(url).body
-    |> Poison.decode!
-    |> Map.fetch!("items")
-
+    result = HTTPoison.get!(url).body |> Poison.decode!
     {:reply, result, token}
   end
 
   def handle_call({:create, path, json}, _from, token) do
     url = url(path, token)
     result = HTTPoison.post!(url, json).body |> Poison.decode!
-
-    %{"html_url" => url} = result
-
-    {:reply, url, token}
+    {:reply, result, token}
   end
 
   @base_url "https://api.github.com"
