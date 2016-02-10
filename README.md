@@ -11,12 +11,13 @@
 defmodule Repo do
   use Ecto.Repo,
     otp_app: :my_app,
-    adapter: GitHub.Ecto,
-    token: nil            # set to a string to be able to write or access private repos. Be careful!
+    adapter: GitHub.Ecto
 end
 
-# 2. Configure this application. Currently the application has no configuration, however this step is still required. In a real project you'd configure it in config/*.exs as every other adapter.
-Application.put_env(:my_app, Repo, [])
+# 2. Configure this application. In a real project you'd configure it in config/*.exs as does every other adapter.
+Application.put_env(:my_app, Repo, [
+  token: nil # set to a string to be able to write or access private repos. Be careful!
+])
 
 # 3. Start the Repo process. In a real project you'd put the Repo module in your project's supervision tree:
 {:ok, _pid} = Repo.start_link
