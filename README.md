@@ -33,7 +33,10 @@ Repo.all(from i in "issues",
 # => [%{"title" => "...", "state" => "...", "url" => "...", ...}, ...]
 
 # 6. (optional) Create an issue if something doesn't look right :-)
-Repo.insert(%GitHub.Issue{title: "Something went wrong", body: "Everything's broken", repo: "wojtekmach/github_ecto"})
+issue = Repo.insert!(%GitHub.Issue{title: "Something went wrong", body: "Everything's broken", repo: "wojtekmach/github_ecto"})
+
+# 7. (optional) Mark the issue as resolved.
+Repo.update!(GitHub.Issue.changeset(issue, %{"state" => "closed"}))
 ```
 
 See more examples of usage in [tests](test/github_ecto_test.exs). Also see the [Ecto API](http://hexdocs.pm/ecto/Ecto.html) and [GitHub API](https://developer.github.com/v3).

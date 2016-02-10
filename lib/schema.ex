@@ -1,7 +1,9 @@
 defmodule GitHub.Issue do
   use Ecto.Schema
 
+  @primary_key {:id, :string, []}
   schema "issues" do
+    field :number, :integer
     field :title, :string
     field :body, :string
     field :state, :string
@@ -13,5 +15,13 @@ defmodule GitHub.Issue do
     # `repo` field doesn't exist in GitHub API (there's `repository_url` though)
     # and we use it to figure out to which repo we want to add an issue
     field :repo, :string
+
+    @required ~w(title repo)
+    @optional ~w(body state)
+
+    def changeset(issue, params \\ :empty) do
+      issue
+      |> Ecto.Changeset.cast(params, @required, @optional)
+    end
   end
 end

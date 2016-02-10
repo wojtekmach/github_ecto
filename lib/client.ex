@@ -17,6 +17,10 @@ defmodule GitHub.Client do
     GenServer.call(__MODULE__, {:create, path, json})
   end
 
+  def patch!({path, json}) do
+    GenServer.call(__MODULE__, {:patch!, path, json})
+  end
+
   ## Callbacks
 
   def handle_call({:search, path}, _from, token) do
@@ -28,6 +32,12 @@ defmodule GitHub.Client do
   def handle_call({:create, path, json}, _from, token) do
     url = url(path, token)
     result = HTTPoison.post!(url, json).body |> Poison.decode!
+    {:reply, result, token}
+  end
+
+  def handle_call({:patch!, path, json}, _from, token) do
+    url = url(path, token)
+    result = HTTPoison.patch!(url, json).body |> Poison.decode!
     {:reply, result, token}
   end
 

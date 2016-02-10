@@ -1,0 +1,83 @@
+[
+  {
+    "request": {
+      "body": "{\"state\":\"closed\"}",
+      "headers": [],
+      "method": "patch",
+      "options": [],
+      "request_body": "",
+      "url": "https://api.github.com/repos/wojtekmach/github_ecto/issues/12?access_token=[FILTERED]"
+    },
+    "response": {
+      "body": "{\"url\":\"https://api.github.com/repos/wojtekmach/github_ecto/issues/12\",\"repository_url\":\"https://api.github.com/repos/wojtekmach/github_ecto\",\"labels_url\":\"https://api.github.com/repos/wojtekmach/github_ecto/issues/12/labels{/name}\",\"comments_url\":\"https://api.github.com/repos/wojtekmach/github_ecto/issues/12/comments\",\"events_url\":\"https://api.github.com/repos/wojtekmach/github_ecto/issues/12/events\",\"html_url\":\"https://github.com/wojtekmach/github_ecto/issues/12\",\"id\":132722480,\"number\":12,\"title\":\"Test\",\"user\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false},\"labels\":[],\"state\":\"closed\",\"locked\":false,\"assignee\":null,\"milestone\":null,\"comments\":0,\"created_at\":\"2016-02-10T15:03:28Z\",\"updated_at\":\"2016-02-10T15:36:15Z\",\"closed_at\":\"2016-02-10T15:36:15Z\",\"body\":\"Integration tests are a scam!\",\"closed_by\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false}}",
+      "headers": {
+        "Server": "GitHub.com",
+        "Date": "Wed, 10 Feb 2016 15:36:15 GMT",
+        "Content-Type": "application/json; charset=utf-8",
+        "Content-Length": "2553",
+        "Status": "200 OK",
+        "X-RateLimit-Limit": "5000",
+        "X-RateLimit-Remaining": "4987",
+        "X-RateLimit-Reset": "1455118979",
+        "Cache-Control": "private, max-age=60, s-maxage=60",
+        "ETag": "\"545061db72cc5ca30b56f02f830f697a\"",
+        "X-OAuth-Scopes": "public_repo",
+        "X-Accepted-OAuth-Scopes": "",
+        "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
+        "X-GitHub-Media-Type": "github.v3; format=json",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Expose-Headers": "ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval",
+        "Access-Control-Allow-Origin": "*",
+        "Content-Security-Policy": "default-src 'none'",
+        "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "deny",
+        "X-XSS-Protection": "1; mode=block",
+        "X-Served-By": "8dd185e423974a7e13abbbe6e060031e",
+        "X-GitHub-Request-Id": "5940D12D:C8D0:567E046:56BB58EE"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  },
+  {
+    "request": {
+      "body": "",
+      "headers": [],
+      "method": "get",
+      "options": [],
+      "request_body": "",
+      "url": "https://api.github.com/search/issues?q=repo:wojtekmach/github_ecto+state:open&access_token=[FILTERED]"
+    },
+    "response": {
+      "body": "{\"total_count\":0,\"incomplete_results\":false,\"items\":[]}",
+      "headers": {
+        "Server": "GitHub.com",
+        "Date": "Wed, 10 Feb 2016 15:36:17 GMT",
+        "Content-Type": "application/json; charset=utf-8",
+        "Content-Length": "55",
+        "Status": "200 OK",
+        "X-RateLimit-Limit": "30",
+        "X-RateLimit-Remaining": "29",
+        "X-RateLimit-Reset": "1455118637",
+        "Cache-Control": "no-cache",
+        "X-OAuth-Scopes": "public_repo",
+        "X-Accepted-OAuth-Scopes": "repo",
+        "X-GitHub-Media-Type": "github.v3; format=json",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Expose-Headers": "ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval",
+        "Access-Control-Allow-Origin": "*",
+        "Content-Security-Policy": "default-src 'none'",
+        "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "deny",
+        "X-XSS-Protection": "1; mode=block",
+        "Vary": "Accept-Encoding",
+        "X-Served-By": "c6c65e5196703428e7641f7d1e9bc353",
+        "X-GitHub-Request-Id": "5940D12D:C8D0:567E0D0:56BB58EF"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

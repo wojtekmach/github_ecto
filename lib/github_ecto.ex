@@ -38,12 +38,17 @@ defmodule GitHub.Ecto do
 
   def insert(_repo, %{model: model} = _meta, params, _autogen, _returning, _opts) do
     result = Request.build(model, params) |> Client.create
-    %{"id" => id, "html_url" => url} = result
+    %{"url" => id, "number" => number, "html_url" => url} = result
 
-    {:ok, %{id: id, url: url}}
+    {:ok, %{id: id, number: number, url: url}}
   end
 
-  def update(_repo, _, _, _, _, _, _), do: raise ArgumentError, "GitHub adapter doesn't yet support update"
+  def update(_repo, %{model: model} = _meta, params, filter, _autogen, [] = _returning, [] = _opts) do
+    id = Keyword.fetch!(filter, :id)
+
+    Request.build_patch(model, id, params) |> Client.patch!
+    {:ok, %{}}
+  end
 
   def delete(_repo, _, _, _, _), do: raise ArgumentError, "GitHub adapter doesn't yet support delete"
 end
@@ -56,6 +61,13 @@ defmodule GitHub.Ecto.Request do
 
     path = "/repos/#{repo}/issues"
     json = Poison.encode!(%{title: title, body: body})
+
+    {path, json}
+  end
+
+  def build_patch(GitHub.Issue, id, params) do
+    "https://api.github.com" <> path = id
+    json = Enum.into(params, %{}) |> Poison.encode!
 
     {path, json}
   end
@@ -86,7 +98,7 @@ defmodule GitHub.Ecto.SearchPath do
   defp parse_where({:==, [], [_, %Ecto.Query.Tagged{tag: nil, type: {0, field}, value: value}]}) do
     "#{field}:#{value}"
   end
-  defp parse_where({:==, [], [{{:., [], [{:&, [], [0]}, field]}, [ecto_type: :any], []}, value]}) do
+  defp parse_where({:==, [], [{{:., [], [{:&, [], [0]}, field]}, [ecto_type: _type], []}, value]}) do
     "#{field}:#{value}"
   end
   defp parse_where({:in, [], [%Ecto.Query.Tagged{tag: nil, type: {:in_array, {0, :labels}}, value: value}, _]}) do
