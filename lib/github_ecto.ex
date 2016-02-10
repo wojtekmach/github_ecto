@@ -37,7 +37,7 @@ defmodule GitHub.Ecto do
   ## Writes
 
   def insert(_repo, %{model: model} = _meta, params, _autogen, _returning, _opts) do
-    result = Request.build(model, params) |> Client.create
+    result = Request.build(model, params) |> Client.post!
     %{"url" => id, "number" => number, "html_url" => url} = result
 
     {:ok, %{id: id, number: number, url: url}}

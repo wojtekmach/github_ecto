@@ -13,8 +13,8 @@ defmodule GitHub.Client do
   end
 
   # Returns url of the created entity
-  def create({path, json}) do
-    GenServer.call(__MODULE__, {:create, path, json})
+  def post!({path, json}) do
+    GenServer.call(__MODULE__, {:post!, path, json})
   end
 
   def patch!({path, json}) do
@@ -29,7 +29,7 @@ defmodule GitHub.Client do
     {:reply, result, token}
   end
 
-  def handle_call({:create, path, json}, _from, token) do
+  def handle_call({:post!, path, json}, _from, token) do
     url = url(path, token)
     result = HTTPoison.post!(url, json).body |> Poison.decode!
     {:reply, result, token}
