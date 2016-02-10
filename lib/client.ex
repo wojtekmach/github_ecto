@@ -8,8 +8,8 @@ defmodule GitHub.Client do
   ## Interface
 
   # Returns list of search results
-  def search(path) do
-    GenServer.call(__MODULE__, {:search, path})
+  def get!(path) do
+    GenServer.call(__MODULE__, {:get!, path})
   end
 
   # Returns url of the created entity
@@ -23,7 +23,7 @@ defmodule GitHub.Client do
 
   ## Callbacks
 
-  def handle_call({:search, path}, _from, token) do
+  def handle_call({:get!, path}, _from, token) do
     url = url(path, token)
     result = HTTPoison.get!(url).body |> Poison.decode!
     {:reply, result, token}

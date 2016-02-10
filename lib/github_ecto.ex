@@ -29,7 +29,7 @@ defmodule GitHub.Ecto do
   def execute(_repo, _meta, prepared, [] = _params, _preprocess, [] = _opts) do
     {_, query} = prepared
     path = SearchPath.build(query)
-    items = Client.search(path) |> Map.fetch!("items") |> Enum.map(fn item -> [item] end)
+    items = Client.get!(path) |> Map.fetch!("items") |> Enum.map(fn item -> [item] end)
 
     {0, items}
   end
