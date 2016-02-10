@@ -21,7 +21,6 @@ defmodule GitHub.Client do
 
   def handle_call({:search, path}, _from, token) do
     url = url(path, token)
-
     result = HTTPoison.get!(url).body |> Poison.decode!
     {:reply, result, token}
   end
@@ -39,7 +38,6 @@ defmodule GitHub.Client do
   end
   defp url(path, token) do
     c = if String.contains?(path, "?"), do: "&", else: "?"
-
     @base_url <> path <> c <> "access_token=" <> token
   end
 end
