@@ -14,9 +14,10 @@ defmodule GitHub.EctoTest do
     use_cassette("search issues") do
       q = from i in "issues",
         where: i.repo == "elixir-lang/ecto" and i.state == "closed" and "Kind:Bug" in i.labels,
-        order_by: [asc: i.created]
+        order_by: [asc: i.created_at]
 
-      assert GitHub.Ecto.SearchPath.build(q) == "/search/issues?q=repo:elixir-lang/ecto+state:closed+label:Kind:Bug&sort=created&order=asc"
+      assert GitHub.Ecto.SearchPath.build(q) ==
+        "/search/issues?q=repo:elixir-lang/ecto+state:closed+label:Kind:Bug&sort=created&order=asc"
 
       issues = TestRepo.all(q)
       assert length(issues) == 30
@@ -67,10 +68,10 @@ defmodule GitHub.Ecto.SearchPathTest do
   end
 
   test "order_by" do
-    q = from i in "issues", where: i.repo == "elixir-lang/ecto", order_by: i.created
+    q = from i in "issues", where: i.repo == "elixir-lang/ecto", order_by: i.created_at
     assert build(q) == "/search/issues?q=repo:elixir-lang/ecto&sort=created&order=asc"
 
-    q = from i in "issues", where: i.repo == "elixir-lang/ecto", order_by: [desc: i.created]
+    q = from i in "issues", where: i.repo == "elixir-lang/ecto", order_by: [desc: i.created_at]
     assert build(q) == "/search/issues?q=repo:elixir-lang/ecto&sort=created&order=desc"
   end
 

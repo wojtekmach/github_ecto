@@ -99,6 +99,7 @@ defmodule GitHub.Ecto.SearchPath do
   defp order_by(%Ecto.Query{order_bys: [order_by]}) do
     %Ecto.Query.QueryExpr{expr: expr} = order_by
     [{order, {{:., [], [{:&, [], [0]}, sort]}, _, []}}] = expr
+    sort = Keyword.fetch!([comments: "comments", created_at: "created", updated_at: "updated"], sort)
 
     "sort=#{sort}&order=#{order}"
   end
