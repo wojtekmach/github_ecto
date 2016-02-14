@@ -67,6 +67,13 @@ defmodule GitHub.Ecto.SearchPathTest do
     assert build(q) == "/search/issues?q=repo:elixir-lang/ecto"
   end
 
+  @tag :skip
+  test "pin variables" do
+    repo = "elixir-lang/ecto"
+    q = from i in "issues", where: i.repo == ^repo
+    assert build(q) == "/search/issues?q=repo:elixir-lang/ecto"
+  end
+
   test "multiple fields" do
     q = from i in "issues", where: i.repo == "elixir-lang/ecto" and i.state == "closed"
     assert build(q) == "/search/issues?q=repo:elixir-lang/ecto+state:closed"
