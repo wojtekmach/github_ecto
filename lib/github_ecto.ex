@@ -116,24 +116,26 @@ defmodule GitHub.Ecto.SearchPath do
 
   defp where(%Ecto.Query{wheres: wheres}) do
     "q=" <> Enum.map_join(wheres, "", fn where ->
-      %Ecto.Query.QueryExpr{expr: expr} = where
-      parse_where(expr)
+      %Ecto.Query.QueryExpr{expr: expr, params: params} = where
+      parse_where(expr, params)
     end)
   end
 
-  defp parse_where({:and, [], [left, right]}) do
-    "#{parse_where(left)}+#{parse_where(right)}"
+  defp parse_where({:and, [], [left, right]}, params) do
+    "#{parse_where(left, params)}+#{parse_where(right, params)}"
   end
-  defp parse_where({:==, [], [_, %Ecto.Query.Tagged{tag: nil, type: {0, field}, value: value}]}) do
+  defp parse_where({:==, [], [_, %Ecto.Query.Tagged{tag: nil, type: {0, field}, value: value}]}, _) do
     "#{field}:#{value}"
   end
-  defp parse_where({:==, [], [{{:., [], [{:&, [], [0]}, field]}, [ecto_type: _type], []}, value]}) do
+  defp parse_where({:==, [], [{{:., [], [{:&, [], [0]}, field]}, _, []}, value]}, params) do
+    value = interpolate(value, params)
     "#{field}:#{value}"
   end
-  defp parse_where({:in, [], [%Ecto.Query.Tagged{tag: nil, type: {:in_array, {0, :labels}}, value: value}, _]}) do
+  defp parse_where({:in, [], [%Ecto.Query.Tagged{tag: nil, type: {:in_array, {0, :labels}}, value: value}, _]}, _) do
     "label:#{value}"
   end
-  defp parse_where({:in, [], [value, {{:., [], [{:&, [], [0]}, :labels]}, [ecto_type: :any], []}]}) do
+  defp parse_where({:in, [], [value, {{:., [], [{:&, [], [0]}, :labels]}, _, []}]}, params) do
+    value = interpolate(value, params)
     "label:#{value}"
   end
 
@@ -162,13 +164,13 @@ defmodule GitHub.Ecto.SearchPath do
 
   defp limit_offset(%Ecto.Query{limit: limit, offset: offset}) do
     limit = if limit do
-      %Ecto.Query.QueryExpr{expr: expr} = limit
-      expr
+      %Ecto.Query.QueryExpr{expr: expr, params: params} = limit
+      interpolate(expr, params)
     end
 
     offset = if offset do
-      %Ecto.Query.QueryExpr{expr: expr} = offset
-      expr
+      %Ecto.Query.QueryExpr{expr: expr, params: params} = offset
+      interpolate(expr, params)
     end
 
     case {limit, offset} do
@@ -186,4 +188,9 @@ defmodule GitHub.Ecto.SearchPath do
         "page=#{page}&per_page=#{limit}"
     end
   end
+
+  defp interpolate({:^, [], [idx]}, params) do
+    Enum.at(params, idx) |> elem(0)
+  end
+  defp interpolate(v, _params), do: v
 end
