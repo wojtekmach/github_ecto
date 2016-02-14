@@ -26,12 +26,41 @@ defmodule GitHub.Ecto do
 
   ## Reads
 
-  def execute(_repo, _meta, prepared, [] = _params, _preprocess, [] = _opts) do
+  def execute(_repo, _meta, prepared, [] = _params, _preprocess, opts) do
+    client = opts[:client] || Client
+
     {_, query} = prepared
+
+    selected_fields = select_fields(query.select.fields, query)
+
     path = SearchPath.build(query)
-    items = Client.get!(path) |> Map.fetch!("items") |> Enum.map(fn item -> [item] end)
+    items =
+      client.get!(path)
+      |> Map.fetch!("items")
+      |> Enum.map(fn item -> extract_fields(item, selected_fields) end)
 
     {0, items}
+  end
+
+  defp extract_fields(item, selected_fields) do
+    Enum.map(selected_fields, fn s ->
+      if s == [] do
+        item
+      else
+        Map.get(item, "#{s}")
+      end
+    end)
+  end
+
+  defp select_fields(fields, query),
+    do: Enum.map(fields, &expr(&1, query))
+
+  defp expr({{:., _, [{:&, _, [_idx]}, field]}, _, []}, _query) when is_atom(field) do
+    field
+  end
+
+  defp expr({:&, [], [0]}, _query) do
+    []
   end
 
   ## Writes

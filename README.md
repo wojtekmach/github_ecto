@@ -25,12 +25,18 @@ Application.put_env(:my_app, Repo, [
 # 4. Import Ecto.Query
 import Ecto.Query, only: [from: 2]
 
-# 5. List all open feature requests on Ecto:
+# 5. List titles and comment counts of all open feature requests in Ecto, sorted by comment counts:
 Repo.all(from i in "issues",
+      select: {i.title, i.comments},
        where: i.repo == "elixir-lang/ecto" and
               i.state == "open" and
-              "Kind:Feature" in i.labels)
-# => [%{"title" => "...", "state" => "...", "url" => "...", ...}, ...]
+              "Kind:Feature" in i.labels,
+    order_by: [desc: :comments])
+# => [{"Introducing Ecto.Multi", 60},
+#     {"Support map update syntax", 14},
+#     {"Create test db from development schema", 9},
+#     {"Provide integration tests with ownership with Hound", 0}]
+# (as of 2015-02-14)
 
 # 6. (optional) Create an issue if something doesn't look right :-)
 issue = Repo.insert!(%GitHub.Issue{title: "Something went wrong", body: "Everything's broken", repo: "wojtekmach/github_ecto"})

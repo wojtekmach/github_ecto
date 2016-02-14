@@ -1,4 +1,4 @@
-defmodule GitHub.EctoTest do
+defmodule GitHub.EctoIntegrationTest do
   use ExUnit.Case, async: false
   import Ecto.Query, only: [from: 2]
 
@@ -51,6 +51,42 @@ defmodule GitHub.EctoTest do
         assert TestRepo.all(from i in GitHub.Issue, where: i.repo == "wojtekmach/github_ecto" and i.state == "open") |> length == 0
       end
     end
+  end
+end
+
+defmodule GitHub.EctoTest do
+  use ExUnit.Case, async: false
+  import Ecto.Query, only: [from: 1, from: 2]
+
+  defmodule FakeClient do
+    def get!(_path) do
+      items = [
+        %{"title" => "Issue 1", "number" => 1},
+        %{"title" => "Issue 2", "number" => 2},
+      ]
+
+      %{"items" => items}
+    end
+  end
+
+  test "select: all fields" do
+    q = from i in "issues"
+    assert TestRepo.all(q, client: FakeClient) ==
+      [%{"number" => 1, "title" => "Issue 1"}, %{"number" => 2, "title" => "Issue 2"}]
+
+    q = from i in "issues", select: i
+    assert TestRepo.all(q, client: FakeClient) ==
+      [%{"number" => 1, "title" => "Issue 1"}, %{"number" => 2, "title" => "Issue 2"}]
+  end
+
+  test "select: some fields" do
+    q = from i in "issues", select: i.title
+    assert TestRepo.all(q, client: FakeClient) ==
+      ["Issue 1", "Issue 2"]
+
+    q = from i in "issues", select: {i.number, i.title}
+    assert TestRepo.all(q, client: FakeClient) ==
+      [{1, "Issue 1"}, {2, "Issue 2"}]
   end
 end
 
