@@ -43,7 +43,7 @@ defmodule GitHub.EctoIntegrationTest do
       TestRepo.one!(from i in GitHub.Issue, where: i.repo == "wojtekmach/github_ecto" and i.state == "open")
 
       use_cassette("update an issue") do
-        changeset = GitHub.Issue.changeset(issue, %{"state" => "closed"})
+        changeset = GitHub.Issue.changeset(issue, %{state: "closed"})
         TestRepo.update!(changeset)
 
         # FIXME:
