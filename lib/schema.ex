@@ -1,7 +1,7 @@
 defmodule GitHub.Issue do
   use Ecto.Schema
 
-  @primary_key {:id, :string, []}
+  @primary_key {:id, :string, []} # id is the API url of the issue
   schema "issues" do
     field :number, :integer
     field :title, :string
