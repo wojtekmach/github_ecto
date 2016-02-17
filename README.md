@@ -26,7 +26,7 @@ Application.put_env(:my_app, Repo, [
 import Ecto.Query, only: [from: 2]
 
 # 5. List titles and comment counts of all open feature requests in Ecto, sorted by comment counts:
-Repo.all(from i in "issues",
+Repo.all(from i in GitHub.Issue, # or: from i in "issues" for all fields that API returns
       select: {i.title, i.comments},
        where: i.repo == "elixir-lang/ecto" and
               i.state == "open" and
