@@ -42,13 +42,10 @@ defmodule GitHub.Ecto do
     {0, items}
   end
 
+  defp extract_fields(item, [[]]), do: [item]
   defp extract_fields(item, selected_fields) do
     Enum.map(selected_fields, fn s ->
-      if s == [] do
-        item
-      else
-        Map.get(item, "#{s}")
-      end
+      Map.get(item, "#{s}")
     end)
   end
 
