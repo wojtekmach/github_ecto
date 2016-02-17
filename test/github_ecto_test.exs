@@ -74,15 +74,7 @@ defmodule GitHub.EctoTest do
     assert TestRepo.all(q, client: FakeClient) ==
       [%{"number" => 1, "title" => "Issue 1"}, %{"number" => 2, "title" => "Issue 2"}]
 
-    q = from i in "issues", select: i
-    assert TestRepo.all(q, client: FakeClient) ==
-      [%{"number" => 1, "title" => "Issue 1"}, %{"number" => 2, "title" => "Issue 2"}]
-
     q = from i in GitHub.Issue
-    assert TestRepo.all(q, client: FakeClient) ==
-      [%GitHub.Issue{number: 1, title: "Issue 1"}, %GitHub.Issue{number: 2, title: "Issue 2"}]
-
-    q = from i in GitHub.Issue, select: i
     assert TestRepo.all(q, client: FakeClient) ==
       [%GitHub.Issue{number: 1, title: "Issue 1"}, %GitHub.Issue{number: 2, title: "Issue 2"}]
   end
