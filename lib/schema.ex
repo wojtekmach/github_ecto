@@ -1,8 +1,19 @@
+defmodule GitHub.User do
+  use Ecto.Schema
+
+  @primary_key {:id, :string, []} # id is the API url of the user
+  schema "users" do
+    field :login, :string
+  end
+end
+
 defmodule GitHub.Issue do
   use Ecto.Schema
 
   @primary_key {:id, :string, []} # id is the API url of the issue
   schema "issues" do
+    has_one :user, GitHub.User
+
     field :body, :string
     field :closed_at, Ecto.DateTime
     field :comments, :integer

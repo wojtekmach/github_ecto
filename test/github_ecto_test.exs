@@ -61,8 +61,8 @@ defmodule GitHub.EctoTest do
   defmodule FakeClient do
     def get!(_path) do
       items = [
-        %{"title" => "Issue 1", "number" => 1},
-        %{"title" => "Issue 2", "number" => 2},
+        %{"title" => "Issue 1", "number" => 1, "user" => %{"login" => "alice"}},
+        %{"title" => "Issue 2", "number" => 2, "user" => %{"login" => "bob"}},
       ]
 
       %{"items" => items}
@@ -71,12 +71,16 @@ defmodule GitHub.EctoTest do
 
   test "select: all fields" do
     q = from i in "issues"
-    assert TestRepo.all(q, client: FakeClient) ==
-      [%{"number" => 1, "title" => "Issue 1"}, %{"number" => 2, "title" => "Issue 2"}]
+    assert TestRepo.all(q, client: FakeClient) == [
+      %{"number" => 1, "title" => "Issue 1", "user" => %{"login" => "alice"}},
+      %{"number" => 2, "title" => "Issue 2", "user" => %{"login" => "bob"}},
+    ]
 
     q = from i in GitHub.Issue
-    assert TestRepo.all(q, client: FakeClient) ==
-      [%GitHub.Issue{number: 1, title: "Issue 1"}, %GitHub.Issue{number: 2, title: "Issue 2"}]
+    assert TestRepo.all(q, client: FakeClient) == [
+      %GitHub.Issue{number: 1, title: "Issue 1", user: %GitHub.User{login: "alice"}},
+      %GitHub.Issue{number: 2, title: "Issue 2", user: %GitHub.User{login: "bob"}},
+    ]
   end
 
   test "select: some fields" do

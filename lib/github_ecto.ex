@@ -57,6 +57,14 @@ defmodule GitHub.Ecto do
       |> Map.to_list
       |> Map.new(fn {key, value} ->
         if key in keys do
+          value =
+            # FIXME: make more generic
+            if key == "user" do
+              extract_fields(value, [[]], {{"users", GitHub.User}}) |> Enum.at(0)
+            else
+              value
+            end
+
           {String.to_atom(key), value}
         else
           {key, value}
