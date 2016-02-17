@@ -26,7 +26,7 @@ defmodule GitHub.Ecto do
 
   ## Reads
 
-  def execute(_repo, _meta, prepared, [] = _params, _preprocess, opts) do
+  def execute(_repo, meta, prepared, [] = _params, _preprocess, opts) do
     client = opts[:client] || Client
 
     {_, query} = prepared
@@ -37,13 +37,36 @@ defmodule GitHub.Ecto do
     items =
       client.get!(path)
       |> Map.fetch!("items")
-      |> Enum.map(fn item -> extract_fields(item, selected_fields) end)
+      |> Enum.map(fn item ->
+        extract_fields(item, selected_fields, meta.sources)
+      end)
 
     {0, items}
   end
 
-  defp extract_fields(item, [[]]), do: [item]
-  defp extract_fields(item, selected_fields) do
+  defp extract_fields(item, [[]], {{_, nil}}), do: [item]
+
+  defp extract_fields(item, [[]], {{_, model}}) do
+    keys =
+      model.__struct__
+      |> Map.keys
+      |> Enum.map(&Atom.to_string/1)
+    keys = keys -- ["__struct__", "__meta__"]
+
+    map = item
+      |> Map.to_list
+      |> Map.new(fn {key, value} ->
+        if key in keys do
+          {String.to_atom(key), value}
+        else
+          {key, value}
+        end
+      end)
+
+    [struct(model, map)]
+  end
+
+  defp extract_fields(item, selected_fields, _) do
     Enum.map(selected_fields, fn s ->
       Map.get(item, "#{s}")
     end)

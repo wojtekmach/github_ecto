@@ -69,6 +69,20 @@ defmodule GitHub.EctoTest do
     end
   end
 
+  test "from: string" do
+    q = from i in "issues"
+
+    assert TestRepo.all(q, client: FakeClient) ==
+      [%{"number" => 1, "title" => "Issue 1"}, %{"number" => 2, "title" => "Issue 2"}]
+  end
+
+  test "from: schema" do
+    q = from i in GitHub.Issue
+
+    assert TestRepo.all(q, client: FakeClient) ==
+      [%GitHub.Issue{number: 1, title: "Issue 1"}, %GitHub.Issue{number: 2, title: "Issue 2"}]
+  end
+
   test "select: all fields" do
     q = from i in "issues"
     assert TestRepo.all(q, client: FakeClient) ==
