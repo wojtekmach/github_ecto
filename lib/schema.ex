@@ -3,14 +3,17 @@ defmodule GitHub.Issue do
 
   @primary_key {:id, :string, []} # id is the API url of the issue
   schema "issues" do
-    field :number, :integer
-    field :title, :string
     field :body, :string
-    field :state, :string
-    field :url, :string
+    field :closed_at, Ecto.DateTime
     field :comments, :integer
     field :created_at, Ecto.DateTime
+    field :labels, {:array, :string}
+    field :locked, :boolean
+    field :number, :integer
+    field :state, :string
+    field :title, :string
     field :updated_at, Ecto.DateTime
+    field :url, :string
 
     # `repo` field doesn't exist in GitHub API (there's `repository_url` though)
     # and we use it to figure out to which repo we want to add an issue
