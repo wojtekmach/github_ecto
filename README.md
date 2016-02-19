@@ -23,7 +23,7 @@ Application.put_env(:my_app, Repo, [
 {:ok, _pid} = Repo.start_link
 
 # 4. Import Ecto.Query
-import Ecto.Query, only: [from: 2]
+import Ecto.Query
 
 # 5. List titles and comment counts of all open feature requests in Ecto, sorted by comment counts:
 Repo.all(from i in GitHub.Issue, # or: from i in "issues" for all fields that API returns
