@@ -57,15 +57,7 @@ defmodule GitHub.Ecto do
       |> Map.to_list
       |> Map.new(fn {key, value} ->
         if key in keys do
-          value =
-            # FIXME: make more generic
-            if key == "user" do
-              extract_fields(value, [[]], {{"users", GitHub.User}}) |> Enum.at(0)
-            else
-              value
-            end
-
-          {String.to_atom(key), value}
+          {String.to_atom(key), extract_value(model, key, value)}
         else
           {key, value}
         end
@@ -82,6 +74,15 @@ defmodule GitHub.Ecto do
 
   defp select_fields(fields, query),
     do: Enum.map(fields, &expr(&1, query))
+
+  defp extract_value(model, key, value) do
+    if :"#{key}" in model.__schema__(:associations) do
+      schema = model.__schema__(:association, :"#{key}").related
+      extract_fields(value, [[]], {{nil, schema}}) |> Enum.at(0)
+    else
+      value
+    end
+  end
 
   defp expr({{:., _, [{:&, _, [_idx]}, field]}, _, []}, _query) when is_atom(field) do
     field
