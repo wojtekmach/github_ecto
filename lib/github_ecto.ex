@@ -44,6 +44,8 @@ defmodule GitHub.Ecto do
     {0, items}
   end
 
+  defp extract_fields(nil, _, _), do: [nil]
+
   defp extract_fields(item, [[]], {{_, nil}}), do: [item]
 
   defp extract_fields(item, [[]], {{_, model}}) do
