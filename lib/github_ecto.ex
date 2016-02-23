@@ -9,16 +9,25 @@ defmodule GitHub.Ecto do
 
   defmacro __before_compile__(_opts), do: :ok
 
-  def start_link(_repo, opts) do
-    token = Keyword.get(opts, :token)
-    Client.start_link(token)
+  def application do
+    :github_acto
   end
+
+  def child_spec(_repo, opts) do
+    token = Keyword.get(opts, :token)
+    Supervisor.Spec.worker(Client, [token])
+  end
+
+  # def start_link(_repo, opts) do
+  #   token = Keyword.get(opts, :token)
+  #   Client.start_link(token)
+  # end
 
   def stop(_, _, _), do: :ok
 
-  def load(type, data), do: Ecto.Type.load(type, data, &load/2)
+  def loaders(_primitive, type), do: [type]
 
-  def dump(type, data), do: Ecto.Type.dump(type, data, &dump/2)
+  def dumpers(_primitive, type), do: [type]
 
   def embed_id(_), do: ObjectID.generate
 
@@ -29,7 +38,7 @@ defmodule GitHub.Ecto do
   def execute(_repo, meta, prepared, [] = _params, _preprocess, opts) do
     client = opts[:client] || Client
 
-    {_, query} = prepared
+    {_, {:all, query}} = prepared
 
     selected_fields = select_fields(query.select.fields, query)
 
@@ -90,27 +99,25 @@ defmodule GitHub.Ecto do
     field
   end
 
-  defp expr({:&, [], [0]}, _query) do
+  defp expr({:&, [], [0, _, _]}, _query) do
     []
   end
 
   ## Writes
 
-  def insert(_repo, %{model: model} = _meta, params, _autogen, _returning, _opts) do
-    result = Request.build(model, params) |> Client.post!
+  def insert(_repo, %{schema: schema} = _meta, params, _autogen, _opts) do
+    result = Request.build(schema, params) |> Client.post!
     %{"url" => id, "number" => number, "html_url" => url} = result
 
     {:ok, %{id: id, number: number, url: url}}
   end
 
-  def update(_repo, %{model: model} = _meta, params, filter, _autogen, [] = _returning, [] = _opts) do
+  def update(_repo, %{schema: schema} = _meta, params, filter, _autogen, _opts) do
     id = Keyword.fetch!(filter, :id)
 
-    Request.build_patch(model, id, params) |> Client.patch!
+    Request.build_patch(schema, id, params) |> Client.patch!
     {:ok, %{}}
   end
-
-  def delete(_repo, _, _, _, _), do: raise ArgumentError, "GitHub adapter doesn't yet support delete"
 end
 
 defmodule GitHub.Ecto.Request do

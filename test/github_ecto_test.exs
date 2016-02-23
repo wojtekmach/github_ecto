@@ -40,7 +40,9 @@ defmodule GitHub.EctoIntegrationTest do
 
       # FIXME:
       # :timer.sleep(2000)
-      TestRepo.one!(from i in GitHub.Issue, where: i.repo == "wojtekmach/github_ecto" and i.state == "open")
+      TestRepo.first!(from i in GitHub.Issue,
+                    where: i.repo == "wojtekmach/github_ecto" and i.state == "open",
+                 order_by: i.created_at)
 
       use_cassette("update an issue") do
         changeset = GitHub.Issue.changeset(issue, %{state: "closed"})
