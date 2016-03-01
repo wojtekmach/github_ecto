@@ -49,9 +49,7 @@ defmodule GitHub.Ecto do
   end
 
   defp extract_fields(nil, _, _), do: [nil]
-
   defp extract_fields(item, [[]], {{_, nil}}), do: [item]
-
   defp extract_fields(item, [[]], {{_, model}}) do
     keys =
       model.__struct__
@@ -71,7 +69,6 @@ defmodule GitHub.Ecto do
 
     [struct(model, map)]
   end
-
   defp extract_fields(item, selected_fields, _) do
     Enum.map(selected_fields, fn s ->
       Map.get(item, "#{s}")
@@ -93,7 +90,6 @@ defmodule GitHub.Ecto do
   defp expr({{:., _, [{:&, _, [_idx]}, field]}, _, []}, _query) when is_atom(field) do
     field
   end
-
   defp expr({:&, [], [0, _, _]}, _query) do
     []
   end
