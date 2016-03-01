@@ -18,11 +18,6 @@ defmodule GitHub.Ecto do
     Supervisor.Spec.worker(Client, [token])
   end
 
-  # def start_link(_repo, opts) do
-  #   token = Keyword.get(opts, :token)
-  #   Client.start_link(token)
-  # end
-
   def stop(_, _, _), do: :ok
 
   def loaders(_primitive, type), do: [type]
