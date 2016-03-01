@@ -10,63 +10,33 @@ defmodule GitHub.Ecto.Search do
     "/search/#{from}?#{str}"
   end
 
-  defp where(%Ecto.Query{wheres: wheres}) do
+  defp where(%Ecto.Query{wheres: wheres} = query) do
     "q=" <> Enum.map_join(wheres, "", fn where ->
       %Ecto.Query.QueryExpr{expr: expr, params: params} = where
-      parse_where(expr, params)
+      expr(expr, params, query)
     end)
   end
 
-  defp parse_where({:and, [], [left, right]}, params) do
-    "#{parse_where(left, params)}+#{parse_where(right, params)}"
-  end
-  defp parse_where({:==, [], [_, %Ecto.Query.Tagged{tag: nil, type: {0, field}, value: value}]}, _) do
-    "#{field}:#{value}"
-  end
-  defp parse_where({:==, [], [{{:., [], [{:&, [], [0]}, field]}, _, []}, value]}, params) do
-    value = interpolate(value, params)
-    "#{field}:#{value}"
-  end
-  defp parse_where({:in, [], [%Ecto.Query.Tagged{tag: nil, type: {:in_array, {0, :labels}}, value: value}, _]}, _) do
-    "label:#{value}"
-  end
-  defp parse_where({:in, [], [value, {{:., [], [{:&, [], [0]}, :labels]}, _, []}]}, params) do
-    value = interpolate(value, params)
-    "label:#{value}"
-  end
-
-  defp order_by(%Ecto.Query{from: {from, _}, order_bys: [order_by]}) do
-    %Ecto.Query.QueryExpr{expr: expr} = order_by
-    [{order, {{:., [], [{:&, [], [0]}, sort]}, _, []}}] = expr
-    {:ok, sort} = normalize_sort(from, sort)
+  defp order_by(%Ecto.Query{order_bys: []}), do: ""
+  defp order_by(%Ecto.Query{from: {from, _}, order_bys: [order_by]} = query) do
+    %Ecto.Query.QueryExpr{expr: [{left, right}], params: params} = order_by
+    order = expr(left, params, query)
+    sort = expr(right, params, query)
+    sort = normalize(from, sort)
 
     "sort=#{sort}&order=#{order}"
   end
-  defp order_by(%Ecto.Query{order_bys: []}), do: ""
   defp order_by(_), do: raise ArgumentError, "GitHub API can only order by one field"
 
-  defp normalize_sort("issues", :comments), do: {:ok, "comments"}
-  defp normalize_sort("issues", :created_at), do: {:ok, "created"}
-  defp normalize_sort("issues", :updated_at), do: {:ok, "updated"}
-  defp normalize_sort("repositories", :stars), do: {:ok, "stars"}
-  defp normalize_sort("repositories", :forks), do: {:ok, "forks"}
-  defp normalize_sort("repositories", :updated_at), do: {:ok, "updated"}
-  defp normalize_sort("users", :followers), do: {:ok, "followers"}
-  defp normalize_sort("users", :public_repos), do: {:ok, "repositories"}
-  defp normalize_sort("users", :created_at), do: {:ok, "joined"}
-  defp normalize_sort(from, field) do
-    {:error, "order_by for #{inspect(from)} and #{inspect(field)} is not supported"}
-  end
-
-  defp limit_offset(%Ecto.Query{limit: limit, offset: offset}) do
+  defp limit_offset(%Ecto.Query{limit: limit, offset: offset} = query) do
     limit = if limit do
       %Ecto.Query.QueryExpr{expr: expr, params: params} = limit
-      interpolate(expr, params)
+      expr(expr, params, query)
     end
 
     offset = if offset do
       %Ecto.Query.QueryExpr{expr: expr, params: params} = offset
-      interpolate(expr, params)
+      expr(expr, params, query)
     end
 
     case {limit, offset} do
@@ -85,8 +55,42 @@ defmodule GitHub.Ecto.Search do
     end
   end
 
-  defp interpolate({:^, [], [idx]}, params) do
+  defp expr({:and, [], [left, right]}, params, query) do
+    "#{expr(left, params, query)}+#{expr(right, params, query)}"
+  end
+  defp expr({:==, [], [left, right]}, params, query) do
+    field = expr(left, params, query)
+    value = expr(right, params, query)
+    "#{field}:#{value}"
+  end
+  defp expr({:in, [], [left, right]}, params, query) do
+    field = expr(right, params, query)
+    field = normalize(query.from, field)
+    value = expr(left, params, query)
+    "#{field}:#{value}"
+  end
+  defp expr({{:., _, [{:&, _, [_idx]}, field]}, _, []}, _params, _query) do
+    field
+  end
+  defp expr(%Ecto.Query.Tagged{type: _type, value: value}, params, query) do
+    expr(value, params, query)
+  end
+  defp expr({:^, [], [idx]}, params, _query) do
     Enum.at(params, idx) |> elem(0)
   end
-  defp interpolate(v, _params), do: v
+  defp expr(value, _params, _query) when is_binary(value) or is_number(value) or is_atom(value) do
+    value
+  end
+
+  defp normalize({name, _schema}, field), do: normalize(name, field)
+  defp normalize("issues", :labels), do: "label"
+  defp normalize("issues", :comments), do: "comments"
+  defp normalize("issues", :created_at), do: "created"
+  defp normalize("issues", :updated_at), do: "updated"
+  defp normalize("repositories", :stars), do: "stars"
+  defp normalize("repositories", :forks), do: "forks"
+  defp normalize("repositories", :updated_at), do: "updated"
+  defp normalize("users", :followers), do: "followers"
+  defp normalize("users", :public_repos), do: "repositories"
+  defp normalize("users", :created_at), do: "joined"
 end
