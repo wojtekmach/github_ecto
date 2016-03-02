@@ -28,6 +28,8 @@ defmodule GitHub.Ecto do
 
   def prepare(operation, query), do: {:nocache, {operation, query}}
 
+  def autogenerate(_), do: raise "Not supported by adapter"
+
   ## Reads
 
   def execute(_repo, meta, prepared, [] = _params, _preprocess, opts) do
@@ -90,6 +92,7 @@ defmodule GitHub.Ecto do
   defp expr({{:., _, [{:&, _, [_idx]}, field]}, _, []}, _query) when is_atom(field) do
     field
   end
+
   defp expr({:&, [], [0, _, _]}, _query) do
     []
   end
@@ -102,6 +105,10 @@ defmodule GitHub.Ecto do
 
     {:ok, %{id: id, number: number, url: url}}
   end
+
+  def insert_all(_, _, _, _, _, _), do: raise "Not supported by adapter"
+
+  def delete(_, _, _, _), do: raise "Not supported by adapter"
 
   def update(_repo, %{schema: schema} = _meta, params, filter, _autogen, _opts) do
     id = Keyword.fetch!(filter, :id)
