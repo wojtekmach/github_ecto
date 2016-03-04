@@ -55,31 +55,60 @@ end
 
 defmodule GitHub.EctoTest do
   use ExUnit.Case, async: false
-  import Ecto.Query, only: [from: 1, from: 2]
+  import Ecto.Query
 
   defmodule FakeClient do
     def get!(_path) do
       items = [
-        %{"title" => "Issue 1", "number" => 1, "user" => %{"login" => "alice"}},
-        %{"title" => "Issue 2", "number" => 2, "user" => %{"login" => "bob"}},
+        build(%{number: 1, title: "Issue 1"}),
+        build(%{number: 2, title: "Issue 2"}),
       ]
 
       %{"items" => items}
+    end
+
+    defp build(params) do
+       Map.merge(defaults("issues"), params)
+       |> Enum.into(%{}, fn {field, value} -> {Atom.to_string(field), value} end)
+    end
+
+    defp defaults("issues") do
+      %{
+        id: nil,
+        body: "",
+        closed_at: nil,
+        comments: 0,
+        created_at: nil,
+        labels: [],
+        locked: false,
+        number: 222,
+        repo: nil,
+        state: "open",
+        title: "",
+        url: nil,
+        updated_at: nil,
+        user: defaults("user"),
+      }
+    end
+    defp defaults("user") do
+      %{
+        login: "alice",
+      }
     end
   end
 
   test "select: all fields" do
     q = from i in "issues"
-    assert TestRepo.all(q, client: FakeClient) == [
-      %{"number" => 1, "title" => "Issue 1", "user" => %{"login" => "alice"}},
-      %{"number" => 2, "title" => "Issue 2", "user" => %{"login" => "bob"}},
-    ]
+    assert [
+      %{"number" => 1, "title" => "Issue 1"}, # TODO: "user" => %{"login" => "alice"}},
+      %{"number" => 2, "title" => "Issue 2"}, # TODO: "user" => %{"login" => "bob"}},
+    ] = TestRepo.all(q, client: FakeClient)
 
-    q = from i in GitHub.Issue
-    assert TestRepo.all(q, client: FakeClient) == [
+    q = from i in GitHub.Issue, preload: [:user]
+    assert [
       %GitHub.Issue{number: 1, title: "Issue 1", user: %GitHub.User{login: "alice"}},
-      %GitHub.Issue{number: 2, title: "Issue 2", user: %GitHub.User{login: "bob"}},
-    ]
+      %GitHub.Issue{number: 2, title: "Issue 2", user: %GitHub.User{login: "alice"}},
+    ] = TestRepo.all(q, client: FakeClient)
   end
 
   test "select: some fields" do
@@ -96,4 +125,3 @@ defmodule GitHub.EctoTest do
       [{1, "Issue 1"}, {2, "Issue 2"}]
   end
 end
-

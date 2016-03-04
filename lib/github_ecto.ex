@@ -20,9 +20,9 @@ defmodule GitHub.Ecto do
 
   def stop(_, _, _), do: :ok
 
-  def loaders(_primitive, type), do: [type]
+  def loaders(primitive, _type), do: [primitive]
 
-  def dumpers(_primitive, type), do: [type]
+  def dumpers(primitive, _type), do: [primitive]
 
   def embed_id(_), do: ObjectID.generate
 
@@ -32,69 +32,44 @@ defmodule GitHub.Ecto do
 
   ## Reads
 
-  def execute(_repo, meta, prepared, [] = _params, _preprocess, opts) do
+  def execute(_repo, %{fields: fields} = _meta, {:nocache, {:all, query}}, [] = _params, preprocess, opts) do
     client = opts[:client] || Client
-
-    {_, {:all, query}} = prepared
-
-    selected_fields = select_fields(query.select.fields, query)
-
     path = Search.build(query)
+
     items =
       client.get!(path)
       |> Map.fetch!("items")
-      |> Enum.map(fn item ->
-        extract_fields(item, selected_fields, meta.sources)
-      end)
+      |> Enum.map(fn item -> process_item(item, fields, preprocess) end)
 
     {0, items}
   end
 
-  defp extract_fields(nil, _, _), do: [nil]
-  defp extract_fields(item, [[]], {{_, nil}}), do: [item]
-  defp extract_fields(item, [[]], {{_, model}}) do
-    keys =
-      model.__struct__
-      |> Map.keys
-      |> Enum.map(&Atom.to_string/1)
-    keys = keys -- ["__struct__", "__meta__"]
-
-    map = item
-      |> Map.to_list
-      |> Map.new(fn {key, value} ->
-        if key in keys do
-          {String.to_atom(key), extract_value(model, key, value)}
-        else
-          {key, value}
-        end
-      end)
-
-    [struct(model, map)]
+  defp process_item(item, [{:&, [], [0, nil, _]}], _preprocess) do
+    [item]
   end
-  defp extract_fields(item, selected_fields, _) do
-    Enum.map(selected_fields, fn s ->
-      Map.get(item, "#{s}")
+  defp process_item(item, [{:&, [], [0, field_names, _]}], preprocess) do
+    field_names = field_names -- [:repo]
+
+    fields = [{:&, [], [0, field_names, nil]}]
+    values = Enum.map(field_names, fn field -> Map.fetch!(item, Atom.to_string(field)) end)
+    [preprocess.(hd(fields), values, nil) |> process_assocs(item) ]
+  end
+  defp process_item(item, exprs, preprocess) do
+    Enum.map(exprs, fn {{:., [], [{:&, [], [0]}, field]}, _, []} ->
+      preprocess.(field, Map.fetch!(item, Atom.to_string(field)), nil)
     end)
   end
 
-  defp select_fields(fields, query),
-    do: Enum.map(fields, &expr(&1, query))
-
-  defp extract_value(model, key, value) do
-    if :"#{key}" in model.__schema__(:associations) do
-      schema = model.__schema__(:association, :"#{key}").related
-      extract_fields(value, [[]], {{nil, schema}}) |> Enum.at(0)
-    else
-      value
-    end
-  end
-
-  defp expr({{:., _, [{:&, _, [_idx]}, field]}, _, []}, _query) when is_atom(field) do
-    field
-  end
-
-  defp expr({:&, [], [0, _, _]}, _query) do
-    []
+  defp process_assocs(%{__struct__: struct} = schema, item) do
+    Enum.map(struct.__schema__(:associations), fn assoc ->
+      assoc_schema =
+        struct.__schema__(:association, assoc).queryable
+        |> struct(item[Atom.to_string(assoc)])
+      {assoc, assoc_schema}
+    end)
+    |> Enum.reduce(schema, fn({assoc, assoc_schema}, schema) ->
+      Map.put(schema, assoc, assoc_schema)
+    end)
   end
 
   ## Writes
