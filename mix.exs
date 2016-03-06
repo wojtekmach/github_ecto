@@ -32,7 +32,7 @@ defmodule GitHub.Ecto.Mixfile do
     [
       {:ecto, "~> 2.0.0-beta"},
       {:httpoison, "~> 0.8.0"},
-      {:poison, "~> 1.0"},
+      {:poison, "~> 2.0"},
       {:exvcr, "~> 0.7", only: :test},
     ]
   end
