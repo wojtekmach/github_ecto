@@ -30,7 +30,7 @@ defmodule GitHub.Ecto.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:ecto, "~> 2.0.0-beta.1"},
+      {:ecto, "~> 2.0.0-beta"},
       {:httpoison, "~> 0.8.0"},
       {:poison, "~> 1.0"},
       {:exvcr, "~> 0.7", only: :test},

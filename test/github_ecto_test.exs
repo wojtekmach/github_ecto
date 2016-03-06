@@ -12,9 +12,9 @@ defmodule GitHub.EctoIntegrationTest do
 
   test "search issues" do
     use_cassette("search issues") do
-      q = from i in "issues",
-        where: i.repo == "elixir-lang/ecto" and i.state == "closed" and "Kind:Bug" in i.labels,
-        order_by: [asc: i.created_at]
+      q = from(i in "issues",
+               where: i.repo == "elixir-lang/ecto" and i.state == "closed" and "Kind:Bug" in i.labels,
+               order_by: [asc: i.created_at])
 
       issues = TestRepo.all(q)
       assert length(issues) == 30
@@ -37,9 +37,10 @@ defmodule GitHub.EctoIntegrationTest do
 
       # FIXME:
       # :timer.sleep(2000)
-      TestRepo.first!(from i in GitHub.Issue,
-                    where: i.repo == "wojtekmach/github_ecto" and i.state == "open",
-                 order_by: i.created_at)
+      q = from(i in GitHub.Issue,
+               where: i.repo == "wojtekmach/github_ecto" and i.state == "open",
+               order_by: i.created_at)
+      TestRepo.one!(q)
 
       use_cassette("update an issue") do
         changeset = GitHub.Issue.changeset(issue, %{state: "closed"})
@@ -47,7 +48,8 @@ defmodule GitHub.EctoIntegrationTest do
 
         # FIXME:
         # :timer.sleep(2000)
-        assert TestRepo.all(from i in GitHub.Issue, where: i.repo == "wojtekmach/github_ecto" and i.state == "open") |> length == 0
+        q = from(i in GitHub.Issue, where: i.repo == "wojtekmach/github_ecto" and i.state == "open")
+        assert TestRepo.all(q) |> length == 0
       end
     end
   end
