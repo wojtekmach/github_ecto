@@ -1,5 +1,7 @@
 # GitHub.Ecto
 
+[![Build Status](https://travis-ci.org/wojtekmach/github_ecto.svg?branch=master)](https://travis-ci.org/wojtekmach/github_ecto)
+
 ## Example
 
 ```elixir
