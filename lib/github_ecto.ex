@@ -10,7 +10,7 @@ defmodule GitHub.Ecto do
   defmacro __before_compile__(_opts), do: :ok
 
   def application do
-    :github_acto
+    :github_ecto
   end
 
   def child_spec(_repo, opts) do
