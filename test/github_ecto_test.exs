@@ -70,8 +70,8 @@ defmodule GitHub.EctoTest do
     end
 
     defp build(params) do
-       Map.merge(defaults("issues"), params)
-       |> Enum.into(%{}, fn {field, value} -> {Atom.to_string(field), value} end)
+      Map.merge(defaults("issues"), params)
+      |> Enum.into(%{}, fn {field, value} -> {Atom.to_string(field), value} end)
     end
 
     defp defaults("issues") do
@@ -90,6 +90,7 @@ defmodule GitHub.EctoTest do
         url: nil,
         updated_at: nil,
         user: defaults("user"),
+        assignee: nil,
       }
     end
     defp defaults("user") do

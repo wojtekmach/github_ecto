@@ -62,10 +62,17 @@ defmodule GitHub.Ecto do
 
   defp process_assocs(%{__struct__: struct} = schema, item) do
     Enum.map(struct.__schema__(:associations), fn assoc ->
-      assoc_schema =
-        struct.__schema__(:association, assoc).queryable
-        |> struct(item[Atom.to_string(assoc)])
-      {assoc, assoc_schema}
+      attributes = item[Atom.to_string(assoc)]
+
+      if attributes do
+        assoc_schema =
+          struct.__schema__(:association, assoc).queryable
+          |> struct(attributes)
+
+        {assoc, assoc_schema}
+      else
+        {assoc, nil}
+      end
     end)
     |> Enum.reduce(schema, fn({assoc, assoc_schema}, schema) ->
       Map.put(schema, assoc, assoc_schema)

@@ -13,7 +13,7 @@ defmodule GitHub.Issue do
   @primary_key {:id, :string, []} # id is the API url of the issue
   schema "issues" do
     has_one :user, GitHub.User
-    # has_one :assignee, GitHub.User
+    has_one :assignee, GitHub.User
 
     field :body, :string, default: ""
     field :closed_at, Ecto.DateTime
