@@ -72,6 +72,7 @@ defmodule GitHub.EctoTest do
     defp build(params) do
       Map.merge(defaults("issues"), params)
       |> Enum.into(%{}, fn {field, value} -> {Atom.to_string(field), value} end)
+      |> Poison.encode! |> Poison.decode!
     end
 
     defp defaults("issues") do
@@ -103,8 +104,8 @@ defmodule GitHub.EctoTest do
   test "select: all fields" do
     q = from i in "issues"
     assert [
-      %{"number" => 1, "title" => "Issue 1"}, # TODO: "user" => %{"login" => "alice"}},
-      %{"number" => 2, "title" => "Issue 2"}, # TODO: "user" => %{"login" => "bob"}},
+      %{"number" => 1, "title" => "Issue 1", "user" => %{"login" => "alice"}},
+      %{"number" => 2, "title" => "Issue 2", "user" => %{"login" => "alice"}},
     ] = TestRepo.all(q, client: FakeClient)
 
     q = from i in GitHub.Issue, preload: [:user]

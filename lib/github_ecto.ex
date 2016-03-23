@@ -65,11 +65,19 @@ defmodule GitHub.Ecto do
       attributes = item[Atom.to_string(assoc)]
 
       if attributes do
-        assoc_schema =
-          struct.__schema__(:association, assoc).queryable
-          |> struct(attributes)
+        queryable = struct.__schema__(:association, assoc).queryable
+        fields = queryable.__schema__(:fields) |> Enum.map(&Atom.to_string/1)
 
-        {assoc, assoc_schema}
+        attributes =
+          Enum.into(attributes, %{}, fn {key, value} ->
+            if key in fields do
+              {String.to_atom(key), value}
+            else
+              {nil, nil}
+            end
+          end)
+
+        {assoc, struct(queryable, attributes)}
       else
         {assoc, nil}
       end
