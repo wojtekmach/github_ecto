@@ -33,7 +33,7 @@ defmodule GitHub.Ecto.Mixfile do
       {:ecto, "~> 2.0.0-beta"},
       {:httpoison, "~> 0.8.0"},
       {:poison, "~> 2.0"},
-      {:exvcr, "~> 0.7", only: :test, git: "git@github.com:parroty/exvcr"},
+      {:exvcr, "~> 0.7", only: :test, github: "parroty/exvcr"},
     ]
   end
 
