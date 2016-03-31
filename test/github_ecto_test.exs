@@ -53,6 +53,29 @@ defmodule GitHub.EctoIntegrationTest do
       end
     end
   end
+
+  test "search repositories" do
+    use_cassette("search repositories") do
+      q = from(r in GitHub.Repository,
+               where: r.language == "elixir",
+               order_by: [desc: r.stars])
+
+      repositories = TestRepo.all(q)
+      assert Enum.at(repositories, 0).name == "elixir"
+      assert Enum.at(repositories, 1).name == "phoenix"
+    end
+  end
+
+  test "create a repository" do
+    use_cassette("repository creation") do
+      repo = %GitHub.Repository{name: "github_ecto_test", description: "Integration tests are a scam!"}
+      repo = TestRepo.insert!(repo)
+      assert repo.name == "github_ecto_test"
+      assert repo.private == false
+      assert repo.description == "Integration tests are a scam!"
+      assert repo.owner.login == "wojtekmach"
+    end
+  end
 end
 
 defmodule GitHub.EctoTest do

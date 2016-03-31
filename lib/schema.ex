@@ -1,3 +1,5 @@
+# TODO: In GitHub API, both User and Organization are considered
+#       to be an Owner with `type`. Perhaps we should have just Owner.
 defmodule GitHub.User do
   use Ecto.Schema
 
@@ -38,5 +40,30 @@ defmodule GitHub.Issue do
       issue
       |> Ecto.Changeset.cast(params, @required, @optional)
     end
+  end
+end
+
+defmodule GitHub.Repository do
+  use Ecto.Schema
+
+  @primary_key {:id, :string, []} # id is the API url of the repository
+  schema "repositories" do
+    field :created_at, Ecto.DateTime
+    field :default_branch, :string
+    field :description, :string
+    field :fork, :boolean
+    field :forks_count, :integer
+    field :homepage, :string
+    field :language, :string
+    field :name, :string
+    field :open_issues_count, :integer
+    field :private, :boolean
+    field :pushed_at, Ecto.DateTime
+    field :stargazers_count, :integer
+    field :updated_at, Ecto.DateTime
+    field :url, :string
+    field :watchers_count, :integer
+
+    has_one :owner, GitHub.User
   end
 end
