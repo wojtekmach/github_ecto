@@ -19,6 +19,9 @@ defmodule GitHub.Issue do
     field :closed_at, Ecto.DateTime
     field :comments, :integer, default: 0
     field :created_at, Ecto.DateTime
+    # TODO: in API response, labels are returned as hashes.
+    #       Perhaps here do: `{:array, :map}`?
+    #       And then have a separate: `field :label_names, {:array, :string}`.
     field :labels, {:array, :string}, default: []
     field :locked, :boolean, default: false
     field :number, :integer
