@@ -24,7 +24,7 @@ defmodule GitHub.Ecto do
 
   def dumpers(primitive, _type), do: [primitive]
 
-  def embed_id(_), do: ObjectID.generate
+  def embed_id(_), do: raise "Not supported by adapter"
 
   def prepare(operation, query), do: {:nocache, {operation, query}}
 
