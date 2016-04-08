@@ -11,7 +11,7 @@ defmodule GitHub.EctoIntegrationTest do
   end
 
   test "issues: search" do
-    use_cassette("search issues") do
+    use_cassette("issues_search") do
       q = from(i in "issues",
                where: i.repo == "elixir-lang/ecto" and i.state == "closed" and "Kind:Bug" in i.labels,
                order_by: [asc: i.created_at])
@@ -28,7 +28,7 @@ defmodule GitHub.EctoIntegrationTest do
   end
 
   test "issues: create and update" do
-    use_cassette("create an issue") do
+    use_cassette("issues_create") do
       issue = %GitHub.Issue{title: "Test", body: "Integration tests are a scam!", repo: "wojtekmach/github_ecto"}
       issue = TestRepo.insert!(issue)
       assert issue.title == "Test"
@@ -42,7 +42,7 @@ defmodule GitHub.EctoIntegrationTest do
                order_by: i.created_at)
       TestRepo.one!(q)
 
-      use_cassette("update an issue") do
+      use_cassette("issues_update") do
         changeset = GitHub.Issue.changeset(issue, %{state: "closed"})
         TestRepo.update!(changeset)
 
@@ -55,7 +55,7 @@ defmodule GitHub.EctoIntegrationTest do
   end
 
   test "repositories: search" do
-    use_cassette("search repositories") do
+    use_cassette("repositories_search") do
       q = from(r in GitHub.Repository,
                where: r.language == "elixir",
                order_by: [desc: r.stars])
@@ -68,7 +68,7 @@ defmodule GitHub.EctoIntegrationTest do
 
   @tag :skip
   test "repositories: create" do
-    use_cassette("repository creation") do
+    use_cassette("repositories_create") do
       repo = %GitHub.Repository{name: "github_ecto_test", description: "Integration tests are a scam!"}
       repo = TestRepo.insert!(repo)
       assert repo.name == "github_ecto_test"
