@@ -29,16 +29,16 @@ defmodule GitHub.EctoIntegrationTest do
 
   test "issues: create and update" do
     use_cassette("issues_create") do
-      issue = %GitHub.Issue{title: "Test", body: "Integration tests are a scam!", repo: "wojtekmach/github_ecto"}
+      issue = %GitHub.Issue{title: "Test", body: "Integration tests are a scam!", repo: "wojtekmach/github_ecto_test"}
       issue = TestRepo.insert!(issue)
       assert issue.title == "Test"
       assert issue.body == "Integration tests are a scam!"
-      assert "https://github.com/wojtekmach/github_ecto/issues/" <> _number = issue.url
+      assert "https://github.com/wojtekmach/github_ecto_test/issues/" <> _number = issue.url
 
       # FIXME:
       # :timer.sleep(2000)
       q = from(i in GitHub.Issue,
-               where: i.repo == "wojtekmach/github_ecto" and i.state == "open",
+               where: i.repo == "wojtekmach/github_ecto_test" and i.state == "open",
                order_by: i.created_at)
       TestRepo.one!(q)
 
@@ -48,7 +48,7 @@ defmodule GitHub.EctoIntegrationTest do
 
         # FIXME:
         # :timer.sleep(2000)
-        q = from(i in GitHub.Issue, where: i.repo == "wojtekmach/github_ecto" and i.state == "open")
+        q = from(i in GitHub.Issue, where: i.repo == "wojtekmach/github_ecto_test" and i.state == "open")
         assert TestRepo.all(q) |> length == 0
       end
     end
