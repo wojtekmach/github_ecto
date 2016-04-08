@@ -36,7 +36,7 @@ defmodule GitHub.EctoIntegrationTest do
       assert "https://github.com/wojtekmach/github_ecto_test/issues/" <> _number = issue.url
 
       # FIXME:
-      # :timer.sleep(2000)
+      :timer.sleep(1000)
       q = from(i in GitHub.Issue,
                where: i.repo == "wojtekmach/github_ecto_test" and i.state == "open",
                order_by: i.created_at)
@@ -47,7 +47,7 @@ defmodule GitHub.EctoIntegrationTest do
         TestRepo.update!(changeset)
 
         # FIXME:
-        # :timer.sleep(2000)
+        :timer.sleep(1000)
         q = from(i in GitHub.Issue, where: i.repo == "wojtekmach/github_ecto_test" and i.state == "open")
         assert TestRepo.all(q) |> length == 0
       end
