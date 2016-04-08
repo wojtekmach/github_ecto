@@ -10,7 +10,7 @@ defmodule GitHub.EctoIntegrationTest do
     :ok
   end
 
-  test "search issues" do
+  test "issues: search" do
     use_cassette("search issues") do
       q = from(i in "issues",
                where: i.repo == "elixir-lang/ecto" and i.state == "closed" and "Kind:Bug" in i.labels,
@@ -27,7 +27,7 @@ defmodule GitHub.EctoIntegrationTest do
     end
   end
 
-  test "create and update an issue" do
+  test "issues: create and update" do
     use_cassette("create an issue") do
       issue = %GitHub.Issue{title: "Test", body: "Integration tests are a scam!", repo: "wojtekmach/github_ecto"}
       issue = TestRepo.insert!(issue)
@@ -54,7 +54,7 @@ defmodule GitHub.EctoIntegrationTest do
     end
   end
 
-  test "search repositories" do
+  test "repositories: search" do
     use_cassette("search repositories") do
       q = from(r in GitHub.Repository,
                where: r.language == "elixir",
@@ -67,7 +67,7 @@ defmodule GitHub.EctoIntegrationTest do
   end
 
   @tag :skip
-  test "create a repository" do
+  test "repositories: create" do
     use_cassette("repository creation") do
       repo = %GitHub.Repository{name: "github_ecto_test", description: "Integration tests are a scam!"}
       repo = TestRepo.insert!(repo)
