@@ -66,6 +66,7 @@ defmodule GitHub.EctoIntegrationTest do
     end
   end
 
+  @tag :skip
   test "create a repository" do
     use_cassette("repository creation") do
       repo = %GitHub.Repository{name: "github_ecto_test", description: "Integration tests are a scam!"}
