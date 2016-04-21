@@ -91,9 +91,14 @@ defmodule GitHub.Ecto do
 
   def insert(_repo, %{schema: schema} = _meta, params, _autogen, _opts) do
     result = Request.build(schema, params) |> Client.post!
-    %{"url" => id, "number" => number, "html_url" => url} = result
+    do_insert(schema, result)
+  end
 
-    {:ok, %{id: id, number: number, url: url}}
+  defp do_insert(GitHub.Issue, %{"url" => url, "number" => number, "html_url" => html_url}) do
+    {:ok, %{id: url, number: number, url: html_url}}
+  end
+  defp do_insert(GitHub.Repository, %{"url" => url, "private" => private}) do
+    {:ok, %{id: url, private: private}}
   end
 
   def insert_all(_, _, _, _, _, _), do: raise "Not supported by adapter"
@@ -116,6 +121,14 @@ defmodule GitHub.Ecto.Request do
 
     path = "/repos/#{repo}/issues"
     json = Poison.encode!(%{title: title, body: body})
+
+    {path, json}
+  end
+  def build(GitHub.Repository, params) do
+    # TODO: support repos created on organization.
+    #       for now it's only for the current user.
+    path = "/user/repos"
+    json = Poison.encode!(Enum.into(params, %{}))
 
     {path, json}
   end
