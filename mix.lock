@@ -3,7 +3,7 @@
   "ecto": {:hex, :ecto, "2.0.0-beta.2"},
   "exactor": {:hex, :exactor, "2.2.0"},
   "exjsx": {:hex, :exjsx, "3.2.0"},
-  "exvcr": {:git, "https://github.com/parroty/exvcr.git", "0ae8a0f04416138ba9137fa66a695c48ef20fb8e", []},
+  "exvcr": {:hex, :exvcr, "0.7.3"},
   "hackney": {:hex, :hackney, "1.5.7"},
   "httpoison": {:hex, :httpoison, "0.8.2"},
   "idna": {:hex, :idna, "1.2.0"},
