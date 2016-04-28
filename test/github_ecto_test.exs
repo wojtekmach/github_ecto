@@ -55,13 +55,14 @@ defmodule GitHub.EctoIntegrationTest do
 
   test "repositories: create" do
     use_cassette("repositories_create") do
-      repo = %GitHub.Repository{name: "github_ecto_test_create", description: "Integration tests are a scam!"}
+      params = %{name: "github_ecto_test_create",
+                 description: "Integration tests are a scam!"}
+      repo = GitHub.Repository.changeset(%GitHub.Repository{}, params)
       repo = TestRepo.insert!(repo)
       assert repo.name == "github_ecto_test_create"
       assert repo.private == false
       assert repo.description == "Integration tests are a scam!"
-      # TODO:
-      # assert repo.owner.login == "wojtekmach"
+      assert repo.owner.login == "wojtekmach"
     end
   end
 end

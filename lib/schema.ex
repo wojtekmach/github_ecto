@@ -64,6 +64,14 @@ defmodule GitHub.Repository do
     field :url, :string
     field :watchers_count, :integer
 
-    has_one :owner, GitHub.User
+    embeds_one :owner, GitHub.User
+  end
+
+  @required ~w(name description)
+  @optional ~w()
+
+  def changeset(repo, params \\ :empty) do
+    repo
+    |> Ecto.Changeset.cast(params, @required, @optional)
   end
 end

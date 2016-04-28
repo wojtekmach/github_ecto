@@ -97,8 +97,8 @@ defmodule GitHub.Ecto do
   defp do_insert(GitHub.Issue, %{"url" => url, "number" => number, "html_url" => html_url}) do
     {:ok, %{id: url, number: number, url: html_url}}
   end
-  defp do_insert(GitHub.Repository, %{"url" => url, "private" => private}) do
-    {:ok, %{id: url, private: private}}
+  defp do_insert(GitHub.Repository, %{"url" => url, "private" => private, "owner" => owner}) do
+    {:ok, %{id: url, private: private, owner: owner}}
   end
 
   def insert_all(_, _, _, _, _, _), do: raise "Not supported by adapter"
