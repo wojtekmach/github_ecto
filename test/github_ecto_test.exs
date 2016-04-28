@@ -35,6 +35,7 @@ defmodule GitHub.EctoIntegrationTest do
       assert issue.body == "Integration tests are a scam!"
       assert "https://github.com/wojtekmach/github_ecto_test/issues/" <> _number = issue.url
       assert issue.state == "open"
+      assert issue.user.login == "wojtekmach"
 
       changeset = GitHub.Issue.changeset(issue, %{state: "closed"})
       TestRepo.update!(changeset)
@@ -120,7 +121,7 @@ defmodule GitHub.EctoTest do
       %{"number" => 2, "title" => "Issue 2", "user" => %{"login" => "alice"}},
     ] = TestRepo.all(q, client: FakeClient)
 
-    q = from i in GitHub.Issue, preload: [:user]
+    q = from i in GitHub.Issue
     assert [
       %GitHub.Issue{number: 1, title: "Issue 1", user: %GitHub.User{login: "alice"}},
       %GitHub.Issue{number: 2, title: "Issue 2", user: %GitHub.User{login: "alice"}},
