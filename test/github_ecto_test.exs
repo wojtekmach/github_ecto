@@ -28,29 +28,16 @@ defmodule GitHub.EctoIntegrationTest do
   end
 
   test "issues: create and update" do
-    use_cassette("issues_create") do
+    use_cassette("issues_create_update") do
       issue = %GitHub.Issue{title: "Test", body: "Integration tests are a scam!", repo: "wojtekmach/github_ecto_test"}
       issue = TestRepo.insert!(issue)
       assert issue.title == "Test"
       assert issue.body == "Integration tests are a scam!"
       assert "https://github.com/wojtekmach/github_ecto_test/issues/" <> _number = issue.url
+      assert issue.state == "open"
 
-      # FIXME:
-      :timer.sleep(1000)
-      q = from(i in GitHub.Issue,
-               where: i.repo == "wojtekmach/github_ecto_test" and i.state == "open",
-               order_by: i.created_at)
-      TestRepo.one!(q)
-
-      use_cassette("issues_update") do
-        changeset = GitHub.Issue.changeset(issue, %{state: "closed"})
-        TestRepo.update!(changeset)
-
-        # FIXME:
-        :timer.sleep(1000)
-        q = from(i in GitHub.Issue, where: i.repo == "wojtekmach/github_ecto_test" and i.state == "open")
-        assert TestRepo.all(q) |> length == 0
-      end
+      changeset = GitHub.Issue.changeset(issue, %{state: "closed"})
+      TestRepo.update!(changeset)
     end
   end
 
