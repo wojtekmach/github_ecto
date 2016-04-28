@@ -1,7 +1,7 @@
 [
   {
     "request": {
-      "body": "{\"title\":\"Test\",\"body\":\"Integration tests are a scam!\"}",
+      "body": "{\"title\":\"Test\",\"body\":\"Integration tests are a scam!\",\"assignee\":\"wojtekmach\"}",
       "headers": [],
       "method": "post",
       "options": [],
@@ -9,22 +9,22 @@
       "url": "https://api.github.com/repos/wojtekmach/github_ecto_test/issues?access_token=[FILTERED]"
     },
     "response": {
-      "body": "{\"url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58\",\"repository_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test\",\"labels_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58/labels{/name}\",\"comments_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58/comments\",\"events_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58/events\",\"html_url\":\"https://github.com/wojtekmach/github_ecto_test/issues/58\",\"id\":151721227,\"number\":58,\"title\":\"Test\",\"user\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false},\"labels\":[],\"state\":\"open\",\"locked\":false,\"assignee\":null,\"milestone\":null,\"comments\":0,\"created_at\":\"2016-04-28T19:15:31Z\",\"updated_at\":\"2016-04-28T19:15:31Z\",\"closed_at\":null,\"body\":\"Integration tests are a scam!\",\"closed_by\":null}",
+      "body": "{\"url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64\",\"repository_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test\",\"labels_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64/labels{/name}\",\"comments_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64/comments\",\"events_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64/events\",\"html_url\":\"https://github.com/wojtekmach/github_ecto_test/issues/64\",\"id\":151733426,\"number\":64,\"title\":\"Test\",\"user\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false},\"labels\":[],\"state\":\"open\",\"locked\":false,\"assignee\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false},\"milestone\":null,\"comments\":0,\"created_at\":\"2016-04-28T20:17:44Z\",\"updated_at\":\"2016-04-28T20:17:44Z\",\"closed_at\":null,\"body\":\"Integration tests are a scam!\",\"closed_by\":null}",
       "headers": {
         "Server": "GitHub.com",
-        "Date": "Thu, 28 Apr 2016 19:15:31 GMT",
+        "Date": "Thu, 28 Apr 2016 20:17:45 GMT",
         "Content-Type": "application/json; charset=utf-8",
-        "Content-Length": "1675",
+        "Content-Length": "2563",
         "Status": "201 Created",
         "X-RateLimit-Limit": "5000",
-        "X-RateLimit-Remaining": "4979",
-        "X-RateLimit-Reset": "1461873986",
+        "X-RateLimit-Remaining": "4997",
+        "X-RateLimit-Reset": "1461878184",
         "Cache-Control": "private, max-age=60, s-maxage=60",
         "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "ETag": "\"25f5b142d4a7d9275798fd3e73a8629f\"",
+        "ETag": "\"6557b0deab35652f518cf2229f51d758\"",
         "X-OAuth-Scopes": "repo",
         "X-Accepted-OAuth-Scopes": "",
-        "Location": "https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58",
+        "Location": "https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64",
         "X-GitHub-Media-Type": "github.v3; format=json",
         "Access-Control-Expose-Headers": "ETag, Link, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval",
         "Access-Control-Allow-Origin": "*",
@@ -33,8 +33,8 @@
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "deny",
         "X-XSS-Protection": "1; mode=block",
-        "X-Served-By": "b0ef53392caa42315c6206737946d931",
-        "X-GitHub-Request-Id": "5940D12D:1559C:1937BB51:57226153"
+        "X-Served-By": "4c8b2d4732c413f4b9aefe394bd65569",
+        "X-GitHub-Request-Id": "5940D12D:76D6:2856855A:57226FE8"
       },
       "status_code": 201,
       "type": "ok"
@@ -47,22 +47,22 @@
       "method": "patch",
       "options": [],
       "request_body": "",
-      "url": "https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58?access_token=[FILTERED]"
+      "url": "https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64?access_token=[FILTERED]"
     },
     "response": {
-      "body": "{\"url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58\",\"repository_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test\",\"labels_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58/labels{/name}\",\"comments_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58/comments\",\"events_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/58/events\",\"html_url\":\"https://github.com/wojtekmach/github_ecto_test/issues/58\",\"id\":151721227,\"number\":58,\"title\":\"Test\",\"user\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false},\"labels\":[],\"state\":\"closed\",\"locked\":false,\"assignee\":null,\"milestone\":null,\"comments\":0,\"created_at\":\"2016-04-28T19:15:31Z\",\"updated_at\":\"2016-04-28T19:15:31Z\",\"closed_at\":\"2016-04-28T19:15:31Z\",\"body\":\"Integration tests are a scam!\",\"closed_by\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false}}",
+      "body": "{\"url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64\",\"repository_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test\",\"labels_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64/labels{/name}\",\"comments_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64/comments\",\"events_url\":\"https://api.github.com/repos/wojtekmach/github_ecto_test/issues/64/events\",\"html_url\":\"https://github.com/wojtekmach/github_ecto_test/issues/64\",\"id\":151733426,\"number\":64,\"title\":\"Test\",\"user\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false},\"labels\":[],\"state\":\"closed\",\"locked\":false,\"assignee\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false},\"milestone\":null,\"comments\":0,\"created_at\":\"2016-04-28T20:17:44Z\",\"updated_at\":\"2016-04-28T20:17:45Z\",\"closed_at\":\"2016-04-28T20:17:45Z\",\"body\":\"Integration tests are a scam!\",\"closed_by\":{\"login\":\"wojtekmach\",\"id\":76071,\"avatar_url\":\"https://avatars.githubusercontent.com/u/76071?v=3\",\"gravatar_id\":\"\",\"url\":\"https://api.github.com/users/wojtekmach\",\"html_url\":\"https://github.com/wojtekmach\",\"followers_url\":\"https://api.github.com/users/wojtekmach/followers\",\"following_url\":\"https://api.github.com/users/wojtekmach/following{/other_user}\",\"gists_url\":\"https://api.github.com/users/wojtekmach/gists{/gist_id}\",\"starred_url\":\"https://api.github.com/users/wojtekmach/starred{/owner}{/repo}\",\"subscriptions_url\":\"https://api.github.com/users/wojtekmach/subscriptions\",\"organizations_url\":\"https://api.github.com/users/wojtekmach/orgs\",\"repos_url\":\"https://api.github.com/users/wojtekmach/repos\",\"events_url\":\"https://api.github.com/users/wojtekmach/events{/privacy}\",\"received_events_url\":\"https://api.github.com/users/wojtekmach/received_events\",\"type\":\"User\",\"site_admin\":false}}",
       "headers": {
         "Server": "GitHub.com",
-        "Date": "Thu, 28 Apr 2016 19:15:32 GMT",
+        "Date": "Thu, 28 Apr 2016 20:17:45 GMT",
         "Content-Type": "application/json; charset=utf-8",
-        "Content-Length": "2583",
+        "Content-Length": "3471",
         "Status": "200 OK",
         "X-RateLimit-Limit": "5000",
-        "X-RateLimit-Remaining": "4978",
-        "X-RateLimit-Reset": "1461873986",
+        "X-RateLimit-Remaining": "4996",
+        "X-RateLimit-Reset": "1461878184",
         "Cache-Control": "private, max-age=60, s-maxage=60",
         "Vary": "Accept, Authorization, Cookie, X-GitHub-OTP",
-        "ETag": "\"37e772cd7f02f4bf5c27b8800e61ec8b\"",
+        "ETag": "\"58b05c55ba467c47475a7673cd6a0ab9\"",
         "X-OAuth-Scopes": "repo",
         "X-Accepted-OAuth-Scopes": "",
         "X-GitHub-Media-Type": "github.v3; format=json",
@@ -73,8 +73,8 @@
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "deny",
         "X-XSS-Protection": "1; mode=block",
-        "X-Served-By": "8dd185e423974a7e13abbbe6e060031e",
-        "X-GitHub-Request-Id": "5940D12D:1559C:1937BBC4:57226153"
+        "X-Served-By": "065b43cd9674091fec48a221b420fbb3",
+        "X-GitHub-Request-Id": "5940D12D:76D6:2856861B:57226FE9"
       },
       "status_code": 200,
       "type": "ok"

@@ -29,13 +29,20 @@ defmodule GitHub.EctoIntegrationTest do
 
   test "issues: create and update" do
     use_cassette("issues_create_update") do
-      issue = %GitHub.Issue{title: "Test", body: "Integration tests are a scam!", repo: "wojtekmach/github_ecto_test"}
+      params = %{
+        title: "Test",
+        body: "Integration tests are a scam!",
+        repo: "wojtekmach/github_ecto_test",
+        assignee: %{login: "wojtekmach"},
+      }
+      issue = GitHub.Issue.changeset(%GitHub.Issue{}, params)
       issue = TestRepo.insert!(issue)
       assert issue.title == "Test"
       assert issue.body == "Integration tests are a scam!"
       assert "https://github.com/wojtekmach/github_ecto_test/issues/" <> _number = issue.url
       assert issue.state == "open"
       assert issue.user.login == "wojtekmach"
+      assert issue.assignee.login == "wojtekmach"
 
       changeset = GitHub.Issue.changeset(issue, %{state: "closed"})
       TestRepo.update!(changeset)

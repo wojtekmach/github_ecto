@@ -28,7 +28,7 @@ defmodule GitHub.Ecto do
 
   def prepare(operation, query), do: {:nocache, {operation, query}}
 
-  def autogenerate(_), do: raise "Not supported by adapter"
+  def autogenerate(_), do: ""
 
   ## Reads
 
@@ -94,8 +94,8 @@ defmodule GitHub.Ecto do
     do_insert(schema, result)
   end
 
-  defp do_insert(GitHub.Issue, %{"url" => url, "number" => number, "html_url" => html_url, "user" => user}) do
-    {:ok, %{id: url, number: number, url: html_url, user: user}}
+  defp do_insert(GitHub.Issue, %{"url" => url, "number" => number, "html_url" => html_url, "user" => user, "assignee" => assignee}) do
+    {:ok, %{id: url, number: number, url: html_url, user: user, assignee: assignee}}
   end
   defp do_insert(GitHub.Repository, %{"url" => url, "private" => private, "owner" => owner}) do
     {:ok, %{id: url, private: private, owner: owner}}
@@ -118,9 +118,10 @@ defmodule GitHub.Ecto.Request do
     repo = Keyword.fetch!(params, :repo)
     title = Keyword.fetch!(params, :title)
     body = Keyword.fetch!(params, :body)
+    assignee = get_in(params, [:assignee, :login])
 
     path = "/repos/#{repo}/issues"
-    json = Poison.encode!(%{title: title, body: body})
+    json = Poison.encode!(%{title: title, body: body, assignee: assignee})
 
     {path, json}
   end

@@ -3,9 +3,17 @@
 defmodule GitHub.User do
   use Ecto.Schema
 
-  @primary_key {:id, :string, []} # id is the API url of the user
+  @primary_key {:id, :binary_id, [autogenerate: true]} # id is the API url of the user
   schema "users" do
     field :login, :string
+  end
+
+  @required ~w(login)
+  @optional ~w()
+
+  def changeset(user, params \\ :empty) do
+    user
+    |> Ecto.Changeset.cast(params, @required, @optional)
   end
 end
 
@@ -34,11 +42,12 @@ defmodule GitHub.Issue do
     embeds_one :user, GitHub.User
 
     @required ~w(title repo)
-    @optional ~w(body state)
+    @optional ~w(body state assignee_login)
 
     def changeset(issue, params \\ :empty) do
       issue
       |> Ecto.Changeset.cast(params, @required, @optional)
+      |> Ecto.Changeset.cast_embed(:assignee)
     end
   end
 end
