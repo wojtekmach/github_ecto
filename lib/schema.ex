@@ -39,7 +39,7 @@ defmodule GitHub.Issue do
     embeds_one :user, GitHub.User
 
     @required ~w(title repo)
-    @optional ~w(body state assignee_login)
+    @optional ~w(body state)
 
     def changeset(issue, params \\ :empty) do
       issue
