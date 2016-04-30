@@ -126,8 +126,6 @@ defmodule GitHub.Ecto.Request do
     {path, json}
   end
   def build(GitHub.Repository, params) do
-    # TODO: support repos created on organization.
-    #       for now it's only for the current user.
     path = "/user/repos"
     json = Poison.encode!(Enum.into(params, %{}))
 

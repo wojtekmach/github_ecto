@@ -1,5 +1,3 @@
-# TODO: In GitHub API, both User and Organization are considered
-#       to be an Owner with `type`. Perhaps we should have just Owner.
 defmodule GitHub.User do
   use Ecto.Schema
 
