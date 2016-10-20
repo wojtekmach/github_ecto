@@ -30,7 +30,7 @@ import Ecto.Query
 # 5. List titles and comment counts of all open feature requests in Ecto, sorted by comment counts:
 q = from(i in GitHub.Issue, # or: from i in "issues" for all fields that API returns
          select: {i.title, i.comments},
-         where: i.repo == "elixir-lang/ecto" and
+         where: i.repo == "elixir-ecto/ecto" and
                 i.state == "open" and
                 "Kind:Feature" in i.labels,
          order_by: [desc: :comments])
