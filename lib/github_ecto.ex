@@ -18,6 +18,10 @@ defmodule GitHub.Ecto do
     Supervisor.Spec.worker(Client, [token])
   end
 
+  def ensure_all_started(_repo, _type) do
+    {:ok, []}
+  end
+
   def stop(_, _, _), do: :ok
 
   def loaders(primitive, _type), do: [primitive]
@@ -95,10 +99,10 @@ defmodule GitHub.Ecto do
   end
 
   defp do_insert(GitHub.Issue, %{"url" => url, "number" => number, "html_url" => html_url, "user" => user, "assignee" => assignee}) do
-    {:ok, %{id: url, number: number, url: html_url, user: user, assignee: assignee}}
+    {:ok, [id: url, number: number, url: html_url, user: user, assignee: assignee]}
   end
   defp do_insert(GitHub.Repository, %{"url" => url, "private" => private, "owner" => owner}) do
-    {:ok, %{id: url, private: private, owner: owner}}
+    {:ok, [id: url, private: private, owner: owner]}
   end
 
   def insert_all(_, _, _, _, _, _), do: raise "Not supported by adapter"
