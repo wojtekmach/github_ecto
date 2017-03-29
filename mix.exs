@@ -21,7 +21,7 @@ defmodule GitHub.Ecto.Mixfile do
   defp deps do
     [
       {:ecto, "~> 2.0.0"},
-      {:httpoison, "~> 0.8.0"},
+      {:httpoison, "~> 0.9"},
       {:poison, "~> 2.0"},
       {:exvcr, "~> 0.7", only: :test},
     ]
